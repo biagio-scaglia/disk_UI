@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Game, ConsoleState, GameCustomization } from './types';
 import Sidebar from './components/Sidebar';
 import DiscTray from './components/DiscTray';
 import LibraryView from './components/LibraryView';
 import GameDetail from './components/GameDetail';
 import Customizer from './components/Customizer';
+import ArtworkManager from './components/ArtworkManager';
 import RetroIcon from './components/RetroIcon';
 import './styles/main.scss';
+
 
 // Giochi Mock di partenza (Retro Cult Classici)
 const INITIAL_GAMES: Game[] = [
@@ -91,7 +93,22 @@ const INITIAL_GAMES: Game[] = [
 ];
 
 function App() {
-  const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
+  const [games, setGames] = useState<Game[]>(() => {
+    const saved = localStorage.getItem('console_games');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return INITIAL_GAMES;
+      }
+    }
+    return INITIAL_GAMES;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('console_games', JSON.stringify(games));
+  }, [games]);
+
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   
   // Stato hardware della console
@@ -308,6 +325,31 @@ function App() {
     setConsoleState((prev) => ({ ...prev, activeView: 'detail' }));
   };
 
+  // Salva l'artwork da SteamGridDB
+  const saveArtwork = (
+    gameId: string,
+    artwork: {
+      coverUrl: string;
+      heroUrl?: string;
+      logoUrl?: string;
+      iconUrl?: string;
+    }
+  ) => {
+    setGames((prev) =>
+      prev.map((g) =>
+        g.id === gameId
+          ? {
+              ...g,
+              coverUrl: artwork.coverUrl,
+              heroUrl: artwork.heroUrl,
+              logoUrl: artwork.logoUrl,
+              iconUrl: artwork.iconUrl,
+            }
+          : g
+      )
+    );
+  };
+
   // Carica i giochi di default (Mock BIOS format)
   const formatAndLoadDefaults = () => {
     setGames(INITIAL_GAMES);
@@ -440,6 +482,7 @@ function App() {
             onInstall={() => installGame(selectedGame.id)}
             onCustomize={() => setConsoleState((prev) => ({ ...prev, activeView: 'customize' }))}
             onDelete={() => deleteGame(selectedGame.id)}
+            onManageArtwork={() => setConsoleState((prev) => ({ ...prev, activeView: 'artwork' }))}
           />
         )}
 
@@ -448,6 +491,14 @@ function App() {
             game={selectedGame}
             onSave={saveCustomization}
             onCancel={() => setConsoleState((prev) => ({ ...prev, activeView: 'detail' }))}
+          />
+        )}
+
+        {consoleState.activeView === 'artwork' && selectedGame && (
+          <ArtworkManager
+            game={selectedGame}
+            onBack={() => setConsoleState((prev) => ({ ...prev, activeView: 'detail' }))}
+            onSaveArtwork={saveArtwork}
           />
         )}
       </main>

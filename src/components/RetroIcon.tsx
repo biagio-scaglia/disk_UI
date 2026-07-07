@@ -22,6 +22,7 @@ interface RetroIconProps {
   className?: string;
   size?: number;
   color?: string;
+  style?: React.CSSProperties;
 }
 
 export const RetroIcon: React.FC<RetroIconProps> = ({
@@ -29,6 +30,7 @@ export const RetroIcon: React.FC<RetroIconProps> = ({
   className = '',
   size = 24,
   color = 'currentColor',
+  style = {},
 }) => {
   const getIconSvg = () => {
     switch (name) {
@@ -190,6 +192,6 @@ export const RetroIcon: React.FC<RetroIconProps> = ({
     }
   };
 
-  return <span className={`retro-icon-wrapper ${className}`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{getIconSvg()}</span>;
+  return <span className={`retro-icon-wrapper ${className}`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', ...style }}>{getIconSvg()}</span>;
 };
 export default RetroIcon;

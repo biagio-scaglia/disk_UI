@@ -20,6 +20,9 @@ export interface Game {
   releaseYear: string;
   genre: string;
   coverUrl: string;           // Immagine di copertina
+  heroUrl?: string;           // Sfondo orizzontale
+  logoUrl?: string;           // Logo trasparente overlay
+  iconUrl?: string;           // Icona quadrata
   installed: boolean;
   lastPlayed?: string;        // Data dell'ultima partita (es. "05 MAG 1998" o "OGGI")
   playTime?: string;          // Tempo di gioco totale (es. "12h 30m")
@@ -28,7 +31,7 @@ export interface Game {
 }
 
 // Stato principale della console / UI
-export type ActiveView = 'library' | 'detail' | 'customize';
+export type ActiveView = 'library' | 'detail' | 'customize' | 'artwork';
 
 export interface ConsoleState {
   powerOn: boolean;           // Stato di accensione della console (pulsante Power)
@@ -39,3 +42,22 @@ export interface ConsoleState {
   isSpinning: boolean;        // Se il CD sta girando nel lettore (avvio gioco)
   isTransitioning: boolean;   // Stato di animazione durante l'inserimento
 }
+
+// Strutture dati per SteamGridDB API
+export interface SGDBGameMatch {
+  id: number;
+  name: string;
+  release_date?: string;
+  types: string[];
+}
+
+export interface SGDBAsset {
+  id: number;
+  url: string;
+  thumb: string;
+  width: number;
+  height: number;
+  style: string;
+  score: number;
+}
+

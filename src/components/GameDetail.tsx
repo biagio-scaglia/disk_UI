@@ -11,6 +11,7 @@ interface GameDetailProps {
   onInstall: () => void;
   onCustomize: () => void;
   onDelete: () => void;
+  onManageArtwork: () => void;
 }
 
 export const GameDetail: React.FC<GameDetailProps> = ({
@@ -22,6 +23,7 @@ export const GameDetail: React.FC<GameDetailProps> = ({
   onInstall,
   onCustomize,
   onDelete,
+  onManageArtwork,
 }) => {
   const { insertedGameId, isSpinning, lidOpen } = consoleState;
   
@@ -55,13 +57,38 @@ export const GameDetail: React.FC<GameDetailProps> = ({
 
   return (
     <div className="detail-container">
-      {/* Intestazione con pulsante di ritorno */}
+      {/* Intestazione con pulsante di ritorno ed eventuale icona custom */}
       <div className="back-btn-container">
         <button onClick={onBack}>
-          <RetroIcon name="arrow-left" size={12} />
+          {game.iconUrl ? (
+            <img 
+              src={game.iconUrl} 
+              alt="" 
+              style={{ width: '12px', height: '12px', marginRight: '6px', borderRadius: '2px', objectFit: 'cover' }} 
+            />
+          ) : (
+            <RetroIcon name="arrow-left" size={12} style={{ marginRight: '6px' }} />
+          )}
           <span>BIOS SCREEN</span>
         </button>
       </div>
+
+      {/* Sfondo Hero Banner se presente per valorizzare l'artwork */}
+      {game.heroUrl && (
+        <div 
+          className="detail-hero-banner" 
+          style={{ backgroundImage: `url(${game.heroUrl})` }}
+        >
+          <div className="hero-banner-gradient" />
+          <div className="hero-banner-logo-container">
+            {game.logoUrl ? (
+              <img src={game.logoUrl} alt={game.title} className="hero-banner-logo" />
+            ) : (
+              <h1 className="hero-banner-title text-mono">{game.title.toUpperCase()}</h1>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="detail-layout">
         {/* Colonna Sinistra: 3D Visual Box + CD */}
@@ -93,7 +120,9 @@ export const GameDetail: React.FC<GameDetailProps> = ({
 
         {/* Colonna Destra: Specifiche e Azioni di Boot */}
         <div className="detail-info">
-          <h2 className="game-title text-mono">{game.title.toUpperCase()}</h2>
+          {!game.heroUrl && (
+            <h2 className="game-title text-mono">{game.title.toUpperCase()}</h2>
+          )}
 
           {/* Dati tecnici del blocco semplificati */}
           <div className="specs-well">
@@ -177,11 +206,15 @@ export const GameDetail: React.FC<GameDetailProps> = ({
           <div className="management-actions">
             <button onClick={onCustomize}>
               <RetroIcon name="customize" size={12} />
-              <span>CUSTOMIZE</span>
+              <span>CUSTOMIZE CD</span>
+            </button>
+            <button onClick={onManageArtwork}>
+              <RetroIcon name="settings" size={12} />
+              <span>ARTWORK</span>
             </button>
             <button className="btn-delete" onClick={onDelete}>
               <RetroIcon name="trash" size={12} />
-              <span>DELETE BLOCK</span>
+              <span>DELETE</span>
             </button>
           </div>
         </div>

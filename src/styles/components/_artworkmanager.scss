@@ -1,0 +1,512 @@
+@import '../variables';
+@import '../mixins';
+
+.artwork-manager-container {
+  flex-grow: 1;
+  height: 100%;
+  padding: $space-xl;
+  overflow-y: auto;
+  @include tech-grid;
+  background-color: lighten($color-bg-dark, 2%);
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  @include retro-scrollbar;
+
+  // Intestazione
+  .manager-header {
+    border-bottom: 2px solid $color-console-dark;
+    padding-bottom: $space-md;
+    box-shadow: 0 1px 0 $color-console-light;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-title {
+      font-family: $font-mono;
+      font-size: $font-size-lg;
+      color: #fff;
+    }
+
+    .game-target-text {
+      display: block;
+      font-size: $font-size-xs;
+      color: $color-text-muted;
+      margin-top: $space-xs;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // Schermata setup API Key
+  .api-key-setup-card {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $space-xxl;
+
+    .setup-well {
+      @include plastic-panel;
+      padding: $space-xl;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $space-md;
+      border-radius: $console-border-radius;
+
+      .setup-icon {
+        color: $color-accent-blue;
+      }
+
+      h3 {
+        color: #fff;
+        font-size: $font-size-lg;
+        margin: 0;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        margin: 0;
+
+        &.hint {
+          font-size: $font-size-xs;
+          color: $color-text-muted;
+          word-break: break-all;
+          background: #111;
+          padding: $space-xs $space-sm;
+          border-radius: 2px;
+          border: 1px solid rgba(255,255,255,0.05);
+        }
+      }
+
+      .input-group {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: $space-sm;
+        margin-top: $space-sm;
+
+        input {
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: $space-sm $space-md;
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          border-radius: 2px;
+          outline: none;
+          text-align: center;
+
+          &:focus {
+            border-color: $color-accent-blue;
+          }
+        }
+
+        button {
+          height: 38px;
+        }
+      }
+    }
+  }
+
+  // Layout principale (Griglia a 2 colonne)
+  .manager-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: $space-xl;
+    align-items: start;
+    flex-grow: 1;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: $space-lg;
+    }
+  }
+
+  .panel-label {
+    @include hardware-label;
+    font-size: $font-size-xs;
+    margin-bottom: $space-sm;
+    display: block;
+  }
+
+  // Colonna Sinistra: Ricerca
+  .search-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+
+    .control-panel {
+      @include plastic-panel;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+
+      .search-bar {
+        display: flex;
+        gap: $space-sm;
+
+        input {
+          flex-grow: 1;
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: $space-sm $space-md;
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          border-radius: 2px;
+          outline: none;
+
+          &:focus {
+            border-color: $color-accent-blue;
+          }
+        }
+
+        button {
+          height: 34px;
+          padding: 0 $space-md;
+        }
+      }
+    }
+
+    .matches-list-well {
+      @include plastic-well;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+      height: 320px;
+      overflow-y: auto;
+      @include retro-scrollbar;
+
+      .matches-empty-state, .loading-spinner-box, .error-message-well {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        font-size: $font-size-sm;
+        color: $color-text-muted;
+      }
+
+      .error-message-well {
+        color: $color-accent-red;
+      }
+
+      .matches-grid {
+        display: flex;
+        flex-direction: column;
+        gap: $space-xs;
+
+        .match-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: $space-sm $space-md;
+          background-color: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          border-radius: 2px;
+          cursor: pointer;
+          transition: all 0.15s ease;
+
+          &:hover {
+            background-color: rgba($color-accent-blue, 0.06);
+            border-color: rgba($color-accent-blue, 0.2);
+          }
+
+          &.selected {
+            background-color: rgba($color-accent-blue, 0.12);
+            border-color: $color-accent-blue;
+            
+            .match-name {
+              color: $color-accent-blue-light;
+            }
+          }
+
+          .match-info {
+            display: flex;
+            align-items: center;
+            gap: $space-xs;
+            
+            .match-name {
+              font-family: $font-mono;
+              font-size: $font-size-sm;
+              color: $color-text-primary;
+              font-weight: bold;
+            }
+
+            .match-date {
+              font-size: $font-size-xs;
+              color: $color-text-muted;
+            }
+          }
+
+          .match-id {
+            font-size: $font-size-xs;
+            color: $color-text-muted;
+          }
+        }
+      }
+    }
+  }
+
+  // Colonna Destra: Galleria & Preview
+  .gallery-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+
+    .gallery-locked-state {
+      @include plastic-well;
+      border-radius: $console-border-radius;
+      height: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: $space-md;
+      color: $color-text-muted;
+      text-align: center;
+      font-size: $font-size-sm;
+
+      .lock-icon {
+        opacity: 0.3;
+      }
+    }
+
+    .gallery-control-panel {
+      @include plastic-panel;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+
+      .tabs-row {
+        display: flex;
+        gap: $space-sm;
+        border-bottom: 2px solid $color-console-dark;
+        padding-bottom: $space-xs;
+        margin-top: $space-xs;
+
+        .tab-btn {
+          @include retro-button;
+          height: 32px;
+          font-size: $font-size-xs;
+          flex-grow: 1;
+
+          &.active {
+            background-color: $color-accent-blue;
+            border-top-color: lighten($color-accent-blue, 10%);
+            border-left-color: lighten($color-accent-blue, 10%);
+            border-bottom-color: darken($color-accent-blue, 20%);
+            border-right-color: darken($color-accent-blue, 20%);
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    // Viewport Gallerie
+    .gallery-viewport {
+      @include plastic-well;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+      height: 250px;
+      overflow-y: auto;
+      @include retro-scrollbar;
+
+      .gallery-empty-state, .loading-spinner-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: $color-text-muted;
+        font-size: $font-size-sm;
+      }
+
+      // Griglie responsive per le varie tipologie di aspect-ratio
+      .gallery-grid-covers,
+      .gallery-grid-heroes,
+      .gallery-grid-logos,
+      .gallery-grid-icons {
+        display: grid;
+        gap: $space-md;
+      }
+
+      .gallery-grid-covers {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      }
+      .gallery-grid-heroes {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+      .gallery-grid-logos {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      .gallery-grid-icons {
+        grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+      }
+
+      .asset-card {
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        background-color: #050608;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 3px;
+        transition: all 0.15s ease;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        &:hover {
+          border-color: rgba($color-accent-blue, 0.4);
+        }
+
+        &.selected {
+          border-color: $color-accent-blue;
+          box-shadow: 0 0 6px rgba(59, 147, 255, 0.5);
+
+          img {
+            opacity: 0.85;
+          }
+        }
+
+        .selection-badge {
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          background-color: $color-accent-blue;
+          color: #fff;
+          border-radius: 50%;
+          width: 16px;
+          height: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #fff;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+      }
+    }
+
+    // Sezione Live Preview combinata
+    .combined-preview-section {
+      @include plastic-panel;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+
+      .preview-canvas-well {
+        @include plastic-well;
+        border-radius: $console-border-radius;
+        padding: 0;
+        overflow: hidden;
+        border-color: darken($color-console-dark, 10%);
+      }
+
+      // La simulazione visiva del dettaglio gioco
+      .canvas-hero {
+        width: 100%;
+        height: 180px;
+        background-color: #121318;
+        background-position: center center;
+        background-size: cover;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        padding: $space-md;
+        box-sizing: border-box;
+
+        .hero-gradient {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.92) 20%, rgba(0,0,0,0.5) 60%, transparent 100%);
+          z-index: 1;
+        }
+
+        .canvas-logo-container {
+          z-index: 2;
+          max-width: 55%;
+          height: 48px;
+          display: flex;
+          align-items: center;
+
+          .canvas-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+
+          .canvas-title {
+            font-size: $font-size-md;
+            color: #fff;
+            text-shadow: 2px 2px 0px #000;
+          }
+        }
+
+        // Mini 3D floating jewel case copertina
+        .canvas-jewel-case {
+          position: absolute;
+          right: $space-md;
+          bottom: -$space-xs;
+          width: 76px;
+          height: 85px;
+          background-color: #000;
+          border-radius: 2px;
+          border: 2px solid rgba(255, 255, 255, 0.15);
+          border-right-color: rgba(0,0,0,0.4);
+          border-bottom-color: rgba(0,0,0,0.4);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+          display: flex;
+          z-index: 3;
+
+          .case-spine {
+            width: 6px;
+            height: 100%;
+            background: repeating-linear-gradient(to bottom, #333 0px, #333 1px, #1a1a1a 1px, #1a1a1a 2px);
+            border-right: 1px solid #000;
+          }
+
+          .case-cover-art {
+            flex-grow: 1;
+            height: 100%;
+            width: 0;
+            min-width: 0;
+            object-fit: cover;
+          }
+
+          .empty-cover-placeholder {
+            flex-grow: 1;
+            height: 100%;
+            background-color: #1a1a1a;
+          }
+
+          .case-glare {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 100%);
+            pointer-events: none;
+          }
+        }
+      }
+
+      .action-row {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          height: 38px;
+          min-width: 160px;
+        }
+      }
+    }
+  }
+}
