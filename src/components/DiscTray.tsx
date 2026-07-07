@@ -57,7 +57,7 @@ export const DiscTray: React.FC<DiscTrayProps> = ({
   return (
     <div className="disc-tray-system">
       <div className="tray-header">
-        <span className="tray-title">DISC PLAYBACK SYSTEM</span>
+        <span className="tray-title">DISC DRIVE</span>
         <span className={`tray-status ${lidOpen ? 'open' : insertedGame ? 'closed' : 'empty'}`}>
           {lidOpen ? 'LID OPEN' : insertedGame ? 'DISC LOADED' : 'NO DISC'}
         </span>
@@ -76,9 +76,7 @@ export const DiscTray: React.FC<DiscTrayProps> = ({
           <div className="spindle-center" />
         </div>
 
-        {/* CD Fisico - Visibile solo se inserito ed è aperto lo sportello,
-            o se chiuso ma mostriamo trasparenza. In questo concept,
-            lo mostriamo sempre se inserito e sportello aperto. */}
+        {/* CD Fisico */}
         {insertedGame && (
           <div
             className={`disc-media ${isSpinning ? 'spinning' : ''} ${
@@ -89,7 +87,7 @@ export const DiscTray: React.FC<DiscTrayProps> = ({
             {/* Anello interno del CD */}
             <div 
               className="disc-inner-ring"
-              style={{ borderColor: insertedGame.customization.discRingColor || 'rgba(255,255,255,0.2)' }}
+              style={{ borderColor: insertedGame.customization.discRingColor || 'rgba(255,255,255,0.15)' }}
             >
               {/* Monospace label print stampata sul disco */}
               <div
@@ -173,18 +171,18 @@ export const DiscTray: React.FC<DiscTrayProps> = ({
       {lidOpen ? (
         <button
           className="disc-tray-footer retro-btn btn-primary"
-          style={{ width: '100%', height: '32px', padding: 0 }}
+          style={{ width: '100%', height: '34px', padding: 0 }}
           disabled={!powerOn || !!insertedGame}
           onClick={onInsertDisc}
         >
-          {insertedGame ? 'CD GIÀ INSERITO' : 'INSERISCI DISCO'}
+          {insertedGame ? 'LOADED' : 'INSERT DISC'}
         </button>
       ) : (
         <div className={`disc-tray-footer ${insertedGame ? 'has-disc' : ''}`}>
           {insertedGame ? (
             <span className="text-mono">{insertedGame.title.toUpperCase()}</span>
           ) : (
-            <span className="text-mono">VANO DISCO VUOTO</span>
+            <span className="text-mono">NO DISC</span>
           )}
         </div>
       )}

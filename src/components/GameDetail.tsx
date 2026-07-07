@@ -58,8 +58,8 @@ export const GameDetail: React.FC<GameDetailProps> = ({
       {/* Intestazione con pulsante di ritorno */}
       <div className="back-btn-container">
         <button onClick={onBack}>
-          <RetroIcon name="arrow-left" size={14} />
-          <span>TORNA AL BIOS DELLA CONSOLE</span>
+          <RetroIcon name="arrow-left" size={12} />
+          <span>BIOS SCREEN</span>
         </button>
       </div>
 
@@ -74,7 +74,7 @@ export const GameDetail: React.FC<GameDetailProps> = ({
             >
               <div 
                 className="disc-center-ring"
-                style={{ borderColor: game.customization.discRingColor || 'rgba(255,255,255,0.2)' }}
+                style={{ borderColor: game.customization.discRingColor || 'rgba(255,255,255,0.15)' }}
               >
                 <span style={{ color: game.customization.discTextColor || '#fff' }}>
                   {game.customization.customTitle || game.title}
@@ -95,31 +95,23 @@ export const GameDetail: React.FC<GameDetailProps> = ({
         <div className="detail-info">
           <h2 className="game-title text-mono">{game.title.toUpperCase()}</h2>
 
-          {/* Dati tecnici del blocco */}
+          {/* Dati tecnici del blocco semplificati */}
           <div className="specs-well">
             <div className="spec-item">
-              <span className="spec-label">Sviluppatore</span>
+              <span className="spec-label">DEVELOPER</span>
               <span className="spec-value">{game.developer.toUpperCase()}</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Anno Uscita</span>
+              <span className="spec-label">RELEASE YEAR</span>
               <span className="spec-value">{game.releaseYear}</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Genere</span>
+              <span className="spec-label">GENRE</span>
               <span className="spec-value">{game.genre.toUpperCase()}</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Blocchi Utilizzati</span>
-              <span className="spec-value">15 BLOCCHI (CD-ROM)</span>
-            </div>
-            <div className="spec-item">
-              <span className="spec-label">Stato Backup</span>
-              <span className="spec-value glow-green">100% INTEGRO</span>
-            </div>
-            <div className="spec-item">
-              <span className="spec-label">Ultima Esecuzione</span>
-              <span className="spec-value">{game.lastPlayed || 'MAI AVVIATO'}</span>
+              <span className="spec-label">PLAY TIME</span>
+              <span className="spec-value">{game.playTime || '--'}</span>
             </div>
           </div>
 
@@ -127,36 +119,36 @@ export const GameDetail: React.FC<GameDetailProps> = ({
           <div className="main-actions-section">
             {!game.installed ? (
               // Stato non installato (Richiede copia in memoria)
-              <button className="retro-btn btn-primary" onClick={onInstall} style={{ height: '50px' }}>
-                <RetroIcon name="plus" size={16} />
-                <span>COPIA DATI DI GIOCO SUL DISCO RIGIDO</span>
+              <button className="retro-btn btn-primary" onClick={onInstall} style={{ height: '44px' }}>
+                <RetroIcon name="plus" size={14} />
+                <span>COPY TO DRIVE</span>
               </button>
             ) : !isThisGameInserted ? (
               // Gioco installato ma CD non inserito nel lettore
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div className="status-alert-box">
-                  <RetroIcon name="settings" className="alert-icon" size={20} />
+                  <RetroIcon name="settings" className="alert-icon" size={18} />
                   <div className="alert-text">
-                    CD-ROM NON INSERITO NEL LETTORE
-                    <span>Apri lo sportello e inserisci il disco di gioco per avviarlo.</span>
+                    NO DISC IN TRAY
+                    <span>Open console lid and insert CD-ROM to play.</span>
                   </div>
                 </div>
                 <button 
                   className="retro-btn btn-primary" 
-                  style={{ height: '46px' }}
+                  style={{ height: '44px' }}
                   onClick={onInsertDisc}
                 >
-                  <RetroIcon name="cd" size={16} />
-                  <span>INSERISCI DISCO NEL VANO</span>
+                  <RetroIcon name="cd" size={14} />
+                  <span>INSERT CD-ROM</span>
                 </button>
               </div>
             ) : lidOpen ? (
               // Gioco inserito ma sportello aperto
               <div className="status-alert-box" style={{ borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <RetroIcon name="eject" className="alert-icon" color="#ef4444" size={20} />
+                <RetroIcon name="eject" className="alert-icon" color="#ef4444" size={18} />
                 <div className="alert-text" style={{ color: '#ef4444' }}>
-                  SPORTELLO LETTORE CD APERTO
-                  <span style={{ color: '#ef4444' }}>Chiudi lo sportello della console per consentire la rotazione del laser.</span>
+                  CD LID OPEN
+                  <span style={{ color: '#ef4444' }}>Close console lid to start laser reading.</span>
                 </div>
               </div>
             ) : (
@@ -168,13 +160,13 @@ export const GameDetail: React.FC<GameDetailProps> = ({
               >
                 {isSpinning ? (
                   <>
-                    <RetroIcon name="cd" className="spinner-icon" size={24} />
-                    <span style={{ marginLeft: '12px' }}>AVVIAMENTO LASER CD-ROM...</span>
+                    <RetroIcon name="cd" className="spinner-icon" size={20} />
+                    <span style={{ marginLeft: '8px' }}>READING DISC...</span>
                   </>
                 ) : (
                   <>
-                    <RetroIcon name="play" size={20} />
-                    <span style={{ marginLeft: '12px' }}>AVVIA GIOCO CD-ROM</span>
+                    <RetroIcon name="play" size={16} />
+                    <span style={{ marginLeft: '8px' }}>BOOT DISC</span>
                   </>
                 )}
               </button>
@@ -184,12 +176,12 @@ export const GameDetail: React.FC<GameDetailProps> = ({
           {/* Azioni di Gestione */}
           <div className="management-actions">
             <button onClick={onCustomize}>
-              <RetroIcon name="customize" size={14} />
-              <span>PERSONALIZZA CD / COPERTINA</span>
+              <RetroIcon name="customize" size={12} />
+              <span>CUSTOMIZE</span>
             </button>
             <button className="btn-delete" onClick={onDelete}>
-              <RetroIcon name="trash" size={14} />
-              <span>ELIMINA DATI BLOCCO</span>
+              <RetroIcon name="trash" size={12} />
+              <span>DELETE BLOCK</span>
             </button>
           </div>
         </div>

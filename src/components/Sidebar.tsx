@@ -36,56 +36,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Sezione Centrale: Memory Card Slots */}
       <div className="sidebar-section">
         <div className="slot-container">
-          <div className="section-label">Slot 1 - Memory Card</div>
+          <div className="section-label">MEMORY CARD SLOT 1</div>
           <div className="card-slot-well">
-            <div className="slot-label">
-              <span>CARD MEMORY</span>
-              <span>8 BLOCKS</span>
-            </div>
             {powerOn && selectedGame ? (
               <div 
                 className="inserted-card" 
                 style={{ cursor: 'pointer' }}
                 onClick={() => onViewChange('detail')}
               >
-                <RetroIcon name="memory-card" className="card-icon" size={20} />
+                <RetroIcon name="memory-card" className="card-icon" size={18} />
                 <div className="card-info">
                   <span className="card-title">{selectedGame.title}</span>
                   <span className="card-meta">
-                    {selectedGame.installed ? 'SALVATO' : 'NON INST.'}
+                    {selectedGame.installed ? 'BLOCK ACTIVE' : 'UNINSTALLED'}
                   </span>
                 </div>
               </div>
             ) : (
               <div className="inserted-card empty">
-                {powerOn ? 'INSERIRE MEMORY' : 'CONSOLE SPENTA'}
+                {powerOn ? 'EMPTY SLOT' : 'SYSTEM STANDBY'}
               </div>
             )}
           </div>
         </div>
 
         <div className="slot-container">
-          <div className="section-label">Slot 2 - System Config</div>
+          <div className="section-label">SYSTEM CONFIG SLOT 2</div>
           <div className="card-slot-well">
-            <div className="slot-label">
-              <span>SYSTEM STATE</span>
-              <span>ROM v1.02</span>
-            </div>
             {powerOn ? (
               <div 
                 className={`inserted-card ${activeView === 'customize' ? 'active' : ''}`}
-                style={{ cursor: 'pointer', background: activeView === 'customize' ? 'darken($color-accent-blue, 5%)' : '' }}
+                style={{ cursor: 'pointer' }}
                 onClick={() => onViewChange('customize')}
               >
-                <RetroIcon name="settings" className="card-icon" size={20} />
+                <RetroIcon name="settings" className="card-icon" size={18} />
                 <div className="card-info">
-                  <span className="card-title">Personalizzatore</span>
-                  <span className="card-meta">Copertine & Dischi</span>
+                  <span className="card-title">Customizer</span>
+                  <span className="card-meta">Prints & Cases</span>
                 </div>
               </div>
             ) : (
               <div className="inserted-card empty">
-                SLOT VUOTO
+                EMPTY SLOT
               </div>
             )}
           </div>
@@ -100,14 +92,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               className={`power-btn ${powerOn ? 'on' : ''}`}
               onClick={onTogglePower}
-              title="Accendi/Spegni Console"
+              title="Power ON / OFF"
             >
-              <RetroIcon name="power" size={24} />
+              <RetroIcon name="power" size={22} />
             </button>
             <div 
               className={`led-light ${powerOn ? (isSpinning ? 'loading' : 'on') : ''}`}
             />
-            <span className="text-mono" style={{ fontSize: '0.55rem', color: '#7e8394', marginTop: '2px' }}>POWER</span>
           </div>
 
           {/* Eject / Reset / Open Lid */}
@@ -116,16 +107,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               disabled={!powerOn}
               onClick={onToggleLid}
             >
-              <span>{lidOpen ? 'CHIUDI SPORTELLO' : 'APRI LETTORE'}</span>
-              <RetroIcon name="eject" size={16} />
+              <span>{lidOpen ? 'LID CLOSE' : 'LID OPEN'}</span>
+              <RetroIcon name="eject" size={14} />
             </button>
 
             <button 
               disabled={!powerOn || !insertedGameId}
               onClick={onEject}
             >
-              <span>ESPELI CD</span>
-              <RetroIcon name="cd" size={16} />
+              <span>EJECT CD</span>
+              <RetroIcon name="cd" size={14} />
             </button>
 
             <button 
@@ -133,13 +124,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={onReset}
             >
               <span>RESET</span>
-              <RetroIcon name="controller" size={16} />
+              <RetroIcon name="controller" size={14} />
             </button>
           </div>
         </div>
 
         <div className="system-badge">
-          Designed by Antigravity
+          designed by biagio-scaglia
         </div>
       </div>
     </aside>

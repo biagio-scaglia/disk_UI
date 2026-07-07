@@ -56,23 +56,22 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         <div className="empty-library-state">
           <div className="bios-screen">
             <div className="bios-header">
-              <span>SYSTEM BIOS v1.00</span>
+              <span>BIOS v1.00</span>
               <span>MEMORY STATE: 0/8 BLOCKS</span>
             </div>
             
-            <h2 className="bios-title">NO SAVED BLOCKS FOUND</h2>
+            <h2 className="bios-title">INSERT DISC TO INITIATE SYSTEM</h2>
             
             <p className="bios-instruction">
-              Nessun blocco dati o gioco installato rilevato nella memoria. Inserisci un nuovo supporto o importa i file di salvataggio di default della console per iniziare.
+              Nessun blocco di salvataggio rilevato in memoria. Inserisci un nuovo supporto o carica i dati predefiniti della console.
             </p>
 
             {/* Visualizzatore slot Memory Card (Tutti vuoti) */}
             <div className="memory-blocks-grid">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="memory-block">
-                  <RetroIcon name="memory-card" size={16} />
-                  <span>BLOCCO {i + 1}</span>
-                  <span style={{ fontSize: '0.45rem', opacity: 0.5 }}>[VUOTO]</span>
+                  <RetroIcon name="memory-card" size={14} />
+                  <span>SLOT #{i + 1}</span>
                 </div>
               ))}
             </div>
@@ -82,10 +81,10 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                 onClick={onLoadMockData}
                 style={{ marginRight: '10px' }}
               >
-                FORMATTA & CARICA GIOCHI
+                LOAD PRESETS
               </button>
               <button onClick={() => setShowModal(true)}>
-                AGGIUNGI GIOCO
+                ADD NEW CD
               </button>
             </div>
           </div>
@@ -102,13 +101,13 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
     <div className="library-container">
       <div className="library-header">
         <div className="library-title text-mono">
-          <RetroIcon name="controller" size={20} />
-          <span>LIBRERIA GIOCHI — {games.length} SLOT ATTIVI</span>
+          <RetroIcon name="controller" size={18} />
+          <span>LIBRERIA — {games.length} BLOCKS</span>
         </div>
         <div className="header-actions">
           <button className="retro-btn" onClick={() => setShowModal(true)}>
-            <RetroIcon name="plus" size={14} />
-            <span>AGGIUNGI DISCO</span>
+            <RetroIcon name="plus" size={12} />
+            <span>ADD CD</span>
           </button>
         </div>
       </div>
@@ -126,17 +125,14 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
               key={game.id}
               className={`jewel-case ${caseStyleClass}`}
               onClick={() => onSelectGame(game.id)}
-              title={`${game.title} - Clicca per inserire`}
+              title={game.title}
             >
               {/* Costola rigata */}
               <div className="case-spine" />
               
-              {/* Copertina del gioco */}
+              {/* Copertina del gioco (Badge rimosso per pulizia visiva) */}
               <div className="case-artwork-wrapper">
                 <img src={game.coverUrl} alt={game.title} className="cover-image" />
-                <span className={`status-badge ${game.installed ? '' : 'not-installed'}`}>
-                  {game.installed ? 'PRONTO' : 'NON INST.'}
-                </span>
               </div>
 
               {/* Riflesso plastica */}
@@ -146,9 +142,9 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         })}
 
         {/* Bottone rapido aggiunta nella griglia */}
-        <div className="add-game-card" onClick={() => setShowModal(true)}>
-          <RetroIcon name="plus" size={32} />
-          <span>NUOVO DISCO</span>
+        <div className="add-game-card" onClick={() => setShowModal(true)} title="Registra nuovo disco">
+          <RetroIcon name="plus" size={24} />
+          <span style={{ fontSize: '0.65rem', marginTop: '4px' }}>[ADD]</span>
         </div>
       </div>
 

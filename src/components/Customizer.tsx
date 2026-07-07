@@ -85,17 +85,17 @@ export const Customizer: React.FC<CustomizerProps> = ({
     <div className="customizer-container">
       {/* Intestazione */}
       <div className="customizer-header">
-        <h2 className="header-title text-mono">STAMPA & CONFEZIONAMENTO HARDWARE</h2>
+        <h2 className="header-title text-mono">PRINT STUDIO</h2>
         <button onClick={onCancel} style={{ padding: '6px 12px', fontSize: '0.75rem' }} className="retro-btn">
-          <RetroIcon name="arrow-left" size={12} />
-          <span style={{ marginLeft: '6px' }}>INDIETRO</span>
+          <RetroIcon name="arrow-left" size={10} />
+          <span style={{ marginLeft: '6px' }}>BACK</span>
         </button>
       </div>
 
       <div className="customizer-layout">
         {/* Colonna Sinistra: Live Preview */}
         <div className="preview-section">
-          <span className="preview-label">Anteprima di Produzione</span>
+          <span className="preview-label">PRODUCTION PREVIEW</span>
           <div className="preview-display">
             {/* Jewel Case Preview */}
             <div className={`preview-case style-${coverStyle}`}>
@@ -141,8 +141,8 @@ export const Customizer: React.FC<CustomizerProps> = ({
               )}
             </div>
           </div>
-          <span className="text-mono" style={{ fontSize: '0.6rem', color: '#7e8394', textAlign: 'center' }}>
-            REGISTRO FISICO: {game.title.toUpperCase()}
+          <span className="text-mono" style={{ fontSize: '0.65rem', color: '#7e8394', textAlign: 'center' }}>
+            REGISTRY INDEX: {game.title.toUpperCase()}
           </span>
         </div>
 
@@ -150,44 +150,44 @@ export const Customizer: React.FC<CustomizerProps> = ({
         <div className="options-section">
           {/* Box Custodia */}
           <div className="options-group">
-            <span className="group-title">1. Edizione Custodia (Jewel Case)</span>
+            <span className="group-title">1. CASE MATERIAL</span>
             
             <div className="option-field">
-              <label htmlFor="select-cover">Materiale / Stile Copertina</label>
+              <label htmlFor="select-cover">EDITION STYLE</label>
               <select
                 id="select-cover"
                 value={coverStyle}
                 onChange={(e) => setCoverStyle(e.target.value as CoverStyle)}
               >
-                <option value="standard">STANDARD (PLASTICA TRASPARENTE)</option>
-                <option value="black-label">BLACK LABEL (VERSIONE RETRO CLASSIC)</option>
-                <option value="platinum">PLATINUM RANGE (BEST SELLER)</option>
-                <option value="holographic">HOLOGRAPHIC (RIFLESSO CANGIANTE)</option>
+                <option value="standard">STANDARD (TRANSPARENT)</option>
+                <option value="black-label">BLACK LABEL EDITION</option>
+                <option value="platinum">PLATINUM RANGE</option>
+                <option value="holographic">HOLOGRAPHIC SHEEN</option>
               </select>
             </div>
           </div>
 
           {/* Box Disco CD */}
           <div className="options-group">
-            <span className="group-title">2. Finitura Supporto Fisico (CD-ROM)</span>
+            <span className="group-title">2. DISC MEDIA</span>
             
             <div className="option-field">
-              <label htmlFor="select-disc-type">Stile Superficie CD</label>
+              <label htmlFor="select-disc-type">COATING LAYER</label>
               <select
                 id="select-disc-type"
                 value={discType}
                 onChange={(e) => setDiscType(e.target.value as DiscType)}
               >
-                <option value="vinyl-black">VINILE NERO OPACIZZATO</option>
-                <option value="classic-silver">SILVER METAL (STILE CD AUDIO)</option>
-                <option value="retro-blue">DEEP BLUE (DISCO BIOS CLASSICO)</option>
-                <option value="custom">TINTA UNITA PERSONALIZZATA</option>
+                <option value="vinyl-black">MATTE VINYL BLACK</option>
+                <option value="classic-silver">METALLIC SILVER</option>
+                <option value="retro-blue">BIOS DEEP BLUE</option>
+                <option value="custom">CUSTOM MATTE COLOUR</option>
               </select>
             </div>
 
             {discType === 'custom' && (
               <div className="option-field">
-                <label>Colore Custom Superficie CD</label>
+                <label>DISC SURFACE INK</label>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <input
                     type="color"
@@ -219,7 +219,7 @@ export const Customizer: React.FC<CustomizerProps> = ({
             )}
 
             <div className="option-field">
-              <label>Colore Anello Interno</label>
+              <label>INNER RING INK</label>
               <input
                 type="color"
                 value={discRingColor}
@@ -231,10 +231,10 @@ export const Customizer: React.FC<CustomizerProps> = ({
 
           {/* Box Dettagli di Stampa */}
           <div className="options-group">
-            <span className="group-title">3. Stampe e Etichette Inchiostro</span>
+            <span className="group-title">3. DISC LABELING</span>
             
             <div className="option-field">
-              <label htmlFor="input-disc-title">Titolo Stampato Sul CD</label>
+              <label htmlFor="input-disc-title">PRINT TITLE</label>
               <input
                 id="input-disc-title"
                 type="text"
@@ -246,30 +246,30 @@ export const Customizer: React.FC<CustomizerProps> = ({
             </div>
 
             <div className="option-field">
-              <label htmlFor="select-ink-color">Colore Testi Inchiostro</label>
+              <label htmlFor="select-ink-color">TEXT INK</label>
               <select
                 id="select-ink-color"
                 value={discTextColor}
                 onChange={(e) => setDiscTextColor(e.target.value)}
               >
-                <option value="#ffffff">BIANCO GESSO (#FFFFFF)</option>
-                <option value="#000000">NERO INCHIOSTRO (#000000)</option>
-                <option value="#f59e0b">AMBRA RETRO (#F59E0B)</option>
-                <option value="#00f0ff">NEON CIANO (#00F0FF)</option>
+                <option value="#ffffff">WHITE</option>
+                <option value="#000000">BLACK</option>
+                <option value="#f59e0b">AMBER</option>
+                <option value="#00f0ff">CYAN</option>
               </select>
             </div>
 
             <div className="option-field">
-              <label htmlFor="select-sticker">Adesivo Custom Applicato</label>
+              <label htmlFor="select-sticker">STICKER OVERLAY</label>
               <select
                 id="select-sticker"
                 value={stickerStyle}
                 onChange={(e) => setStickerStyle(e.target.value as StickerStyle)}
               >
-                <option value="none">NESSUN ADESIVO</option>
-                <option value="demo">ETICHETTA ROSSA "DEMO ONLY"</option>
-                <option value="star">STELLA DORATA DA PRESTIGIO</option>
-                <option value="retro-grid">SCALETTA RETRO-GRID CIANO</option>
+                <option value="none">NONE</option>
+                <option value="demo">DEMO OVERLAY</option>
+                <option value="star">GOLD STAR</option>
+                <option value="retro-grid">GRID SCALE</option>
               </select>
             </div>
           </div>
@@ -277,11 +277,11 @@ export const Customizer: React.FC<CustomizerProps> = ({
           {/* Azioni */}
           <div className="customizer-actions-row">
             <button type="button" className="retro-btn" onClick={onCancel} style={{ border: 'none' }}>
-              ANNULLA
+              CANCEL
             </button>
             <button type="button" className="retro-btn btn-success" onClick={handleSave}>
-              <RetroIcon name="check" size={14} />
-              <span>APPLICA STAMPA</span>
+              <RetroIcon name="check" size={12} />
+              <span>APPLY</span>
             </button>
           </div>
         </div>

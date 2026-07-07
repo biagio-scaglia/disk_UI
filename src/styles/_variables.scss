@@ -30,9 +30,25 @@ $color-text-dark: #0f1013;       // Grigio scuro per parti incavate / testi neri
 $font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'Share Tech Mono', "Courier New", Courier, monospace;
 
-// Dimensioni e Spaziature
-$sidebar-width: 280px;
-$console-border-radius: 8px;
+// Spacing System (Griglia basata su 8px)
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-xxl: 48px;
+
+// Gerarchia Dimensioni Caratteri (Typography)
+$font-size-xs: 0.65rem;  // Dati Memory Card secondari, scritte CD interne
+$font-size-sm: 0.75rem;  // Metadati tecnici secondari, label bottoncini
+$font-size-md: 0.85rem;  // Testi descrittivi principali
+$font-size-lg: 1.05rem;  // Sotto-titoli, pulsanti primari, scritte BIOS
+$font-size-xl: 1.5rem;   // Titoli delle schermate di gioco
+$font-size-xxl: 2.2rem;  // Grandi scritte di Boot / Console Off
+
+// Dimensioni Generali
+$sidebar-width: 290px;
+$console-border-radius: 4px; // Spigoli più netti e geometrici, stile hardware anni '90
 
 // Ombre e Bevel Fisici
 $bevel-outset: 2px solid;

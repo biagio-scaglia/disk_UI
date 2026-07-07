@@ -4,13 +4,13 @@
 .library-container {
   flex-grow: 1;
   height: 100%;
-  padding: 30px;
+  padding: $space-xl;
   overflow-y: auto;
   @include tech-grid;
   background-color: lighten($color-bg-dark, 2%);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: $space-lg;
   position: relative;
   @include retro-scrollbar;
 
@@ -19,37 +19,37 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid rgba(0,0,0,0.3);
-    padding-bottom: 12px;
+    padding-bottom: $space-md;
     box-shadow: 0 1px 0 rgba(255,255,255,0.05);
 
     .library-title {
       font-family: $font-mono;
-      font-size: 1.2rem;
+      font-size: $font-size-lg;
       color: $color-text-primary;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: $space-sm;
     }
 
     .header-actions {
       display: flex;
-      gap: 12px;
+      gap: $space-sm;
     }
   }
 
   // Griglia di Custodie 3D/Fisiche
   .library-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 24px 20px;
-    padding: 10px 0;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: $space-lg;
+    padding: $space-sm 0;
   }
 
   // Struttura fisica di una Custodia CD (Jewel Case)
   .jewel-case {
     position: relative;
     aspect-ratio: 0.9;
-    border-radius: 4px;
+    border-radius: $console-border-radius;
     background-color: rgba(255, 255, 255, 0.03);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -64,7 +64,7 @@
 
     // Costola laterale sinistra della custodia (la striscia grigia o zigrinata)
     .case-spine {
-      width: 14px;
+      width: 12px;
       height: 100%;
       background: repeating-linear-gradient(
         to bottom,
@@ -75,11 +75,6 @@
       );
       border-right: 1px solid rgba(0,0,0,0.5);
       flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 10px;
     }
 
     // Vano interno contenente il libretto/cover art
@@ -259,7 +254,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: $space-xxl;
     height: 100%;
 
     .bios-screen {
@@ -267,36 +262,37 @@
       max-width: 600px;
       @include plastic-panel;
       background-color: #0b0c0e;
-      border: 3px solid $color-console-dark;
-      padding: 24px;
+      border: 2px solid $color-console-dark;
+      padding: $space-xl;
       font-family: $font-mono;
       color: $color-text-muted;
       position: relative;
       box-shadow: 0 10px 25px rgba(0,0,0,0.8);
       @include crt-scanlines;
+      border-radius: $console-border-radius;
 
       .bios-header {
         border-bottom: 1px solid rgba($color-text-muted, 0.2);
-        padding-bottom: 10px;
-        margin-bottom: 20px;
+        padding-bottom: $space-sm;
+        margin-bottom: $space-lg;
         display: flex;
         justify-content: space-between;
-        font-size: 0.75rem;
+        font-size: $font-size-xs;
       }
 
       .bios-title {
         color: #fff;
-        font-size: 1.1rem;
-        margin-bottom: 15px;
+        font-size: $font-size-lg;
+        margin-bottom: $space-md;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         animation: text-glitch 2s infinite linear;
       }
 
       .bios-instruction {
-        font-size: 0.85rem;
+        font-size: $font-size-md;
         line-height: 1.4;
-        margin-bottom: 25px;
+        margin-bottom: $space-lg;
         color: $color-text-primary;
       }
 
@@ -304,20 +300,20 @@
       .memory-blocks-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 30px;
+        gap: $space-sm;
+        margin-bottom: $space-xl;
 
         .memory-block {
           aspect-ratio: 1;
-          border: 1px dashed rgba($color-text-muted, 0.3);
+          border: 1px dashed rgba($color-text-muted, 0.25);
           background-color: rgba(255, 255, 255, 0.02);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          font-size: 0.6rem;
+          font-size: $font-size-xs;
           color: rgba($color-text-muted, 0.5);
-          gap: 6px;
+          gap: $space-xs;
           border-radius: 2px;
           
           &.active {
@@ -357,7 +353,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: $space-lg;
     backdrop-filter: blur(2px);
 
     .add-game-modal {
@@ -365,24 +361,25 @@
       max-width: 460px;
       @include plastic-panel;
       background-color: #0d0e12;
-      border: 3px solid $color-console-dark;
-      padding: 24px;
+      border: 2px solid $color-console-dark;
+      padding: $space-xl;
       font-family: $font-mono;
       @include crt-scanlines;
+      border-radius: $console-border-radius;
 
       .modal-header {
-        font-size: 0.9rem;
+        font-size: $font-size-md;
         color: #fff;
         border-bottom: 2px solid $color-console-dark;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
+        padding-bottom: $space-sm;
+        margin-bottom: $space-md;
         text-transform: uppercase;
         display: flex;
         justify-content: space-between;
       }
 
       .form-group {
-        margin-bottom: 14px;
+        margin-bottom: $space-md;
         display: flex;
         flex-direction: column;
         gap: 6px;
