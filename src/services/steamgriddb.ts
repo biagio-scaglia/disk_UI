@@ -1,25 +1,37 @@
 import { SGDBGameMatch, SGDBAsset, SearchResultGame } from '../types';
+import { invoke } from '@tauri-apps/api/core';
 
 const BASE_URL = 'https://www.steamgriddb.com/api/v2';
 
-function getHeaders(apiKey: string) {
-  return {
-    'Authorization': `Bearer ${apiKey}`,
-  };
-}
-
 /**
- * Cerca un gioco su SteamGridDB tramite nome.
+ * Esegue la fetch di una risorsa. Se in esecuzione all'interno della webview di Tauri,
+ * delega la chiamata al backend Rust per evitare blocchi CORS.
  */
-export async function searchGames(query: string, apiKey: string): Promise<SGDBGameMatch[]> {
-  if (!apiKey || apiKey.trim() === '') {
-    throw new Error('CHIAVE API MANCANTE. CONFIGURA LA CHIAVE NELLE IMPOSTAZIONI.');
-  }
+async function fetchFromBackend(url: string, apiKey: string): Promise<any> {
+  // Controlla se siamo in esecuzione dentro Tauri
+  const isTauri = typeof window !== 'undefined' && (window as any).__TAURI_INTERNALS__;
 
-  try {
-    const response = await fetch(`${BASE_URL}/search/autocomplete/game/${encodeURIComponent(query)}`, {
+  if (isTauri) {
+    try {
+      const resText = await invoke<string>('fetch_steamgriddb', { url, apiKey });
+      return JSON.parse(resText);
+    } catch (err: any) {
+      const errStr = String(err);
+      if (errStr.includes('STATUS_401')) {
+        throw new Error('CHIAVE API NON VALIDA. CONTROLLA LE CREDENZIALI.');
+      }
+      if (errStr.includes('STATUS_429')) {
+        throw new Error('LIMITE DI RICHIESTE SGDB RAGGIUNTO. RIPROVA PIÙ TARDI.');
+      }
+      throw new Error(errStr || 'ERRORE DI RETE DURANTE LA RICHIESTA DAL BACKEND.');
+    }
+  } else {
+    // Fallback standard per browser (soggetto a CORS)
+    const response = await fetch(url, {
       method: 'GET',
-      headers: getHeaders(apiKey),
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+      },
     });
 
     if (!response.ok) {
@@ -32,7 +44,22 @@ export async function searchGames(query: string, apiKey: string): Promise<SGDBGa
       throw new Error(`ERRORE DI RETE: CODICE ${response.status}`);
     }
 
-    const resJson = await response.json();
+    return response.json();
+  }
+}
+
+/**
+ * Cerca un gioco su SteamGridDB tramite nome.
+ */
+export async function searchGames(query: string, apiKey: string): Promise<SGDBGameMatch[]> {
+  if (!apiKey || apiKey.trim() === '') {
+    throw new Error('CHIAVE API MANCANTE. CONFIGURA LA CHIAVE NELLE IMPOSTAZIONI.');
+  }
+
+  try {
+    const url = `${BASE_URL}/search/autocomplete/game/${encodeURIComponent(query)}`;
+    const resJson = await fetchFromBackend(url, apiKey);
+    
     if (resJson.success && Array.isArray(resJson.data)) {
       return resJson.data.map((item: any) => ({
         id: item.id,
@@ -43,7 +70,7 @@ export async function searchGames(query: string, apiKey: string): Promise<SGDBGa
     }
     return [];
   } catch (err: any) {
-    throw new Error(err.message || 'ERRORE DI RETE DURANTE LA RICERCA.');
+    throw new Error(err.message || 'ERRORE DURANTE LA RICERCA.');
   }
 }
 
@@ -59,8 +86,6 @@ export async function getGameAssets(
     throw new Error('CHIAVE API MANCANTE.');
   }
 
-  // Costruiamo i filtri in base alla categoria per caricare gli asset migliori
-  // E.g. per grids carichiamo preferibilmente quelle verticali 600x900 o 2:3
   let params = '';
   if (category === 'grids') {
     params = '?dimensions=600x900,460x215,920x430,460x215&styles=alternate,classic,blurred';
@@ -73,19 +98,9 @@ export async function getGameAssets(
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/${category}/game/${gameId}${params}`, {
-      method: 'GET',
-      headers: getHeaders(apiKey),
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error('CHIAVE API NON VALIDA.');
-      }
-      return [];
-    }
-
-    const resJson = await response.json();
+    const url = `${BASE_URL}/${category}/game/${gameId}${params}`;
+    const resJson = await fetchFromBackend(url, apiKey);
+    
     if (resJson.success && Array.isArray(resJson.data)) {
       return resJson.data.map((item: any) => ({
         id: item.id,
