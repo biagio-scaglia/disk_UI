@@ -1,53 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Game } from '../types';
 import RetroIcon from './RetroIcon';
 
 interface LibraryViewProps {
   games: Game[];
   onSelectGame: (gameId: string) => void;
-  onAddGame: (gameData: Omit<Game, 'id' | 'customization'>) => void;
+  onAddGameClick: () => void;
   onLoadMockData: () => void;
 }
 
 export const LibraryView: React.FC<LibraryViewProps> = ({
   games,
   onSelectGame,
-  onAddGame,
+  onAddGameClick,
   onLoadMockData,
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
-  const [developer, setDeveloper] = useState('');
-  const [releaseYear, setReleaseYear] = useState('');
-  const [genre, setGenre] = useState('');
-  const [coverUrl, setCoverUrl] = useState('');
-  const [installed, setInstalled] = useState(true);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title) return;
-
-    // Se non viene inserito l'URL della cover, usiamo un placeholder generico generato in locale o tinta unita
-    const finalCoverUrl = coverUrl || `https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400`;
-
-    onAddGame({
-      title,
-      developer: developer || 'UNKNOWN DEV',
-      releaseYear: releaseYear || '1998',
-      genre: genre || 'RETRO CLASSIC',
-      coverUrl: finalCoverUrl,
-      installed,
-    });
-
-    // Reset Form
-    setTitle('');
-    setDeveloper('');
-    setReleaseYear('');
-    setGenre('');
-    setCoverUrl('');
-    setInstalled(true);
-    setShowModal(false);
-  };
 
   // Se la libreria è vuota, mostriamo il BIOS Empty State
   if (games.length === 0) {
@@ -83,15 +50,12 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
               >
                 LOAD PRESETS
               </button>
-              <button onClick={() => setShowModal(true)}>
+              <button onClick={onAddGameClick}>
                 ADD NEW CD
               </button>
             </div>
           </div>
         </div>
-
-        {/* Modal di aggiunta gioco */}
-        {showModal && renderAddGameModal()}
       </div>
     );
   }
@@ -105,7 +69,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
           <span>LIBRERIA — {games.length} BLOCKS</span>
         </div>
         <div className="header-actions">
-          <button className="retro-btn" onClick={() => setShowModal(true)}>
+          <button className="retro-btn" onClick={onAddGameClick}>
             <RetroIcon name="plus" size={12} />
             <span>ADD CD</span>
           </button>
@@ -142,106 +106,12 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         })}
 
         {/* Bottone rapido aggiunta nella griglia */}
-        <div className="add-game-card" onClick={() => setShowModal(true)} title="Registra nuovo disco">
+        <div className="add-game-card" onClick={onAddGameClick} title="Registra nuovo disco">
           <RetroIcon name="plus" size={24} />
           <span style={{ fontSize: '0.65rem', marginTop: '4px' }}>[ADD]</span>
         </div>
       </div>
-
-      {/* Modal di aggiunta gioco */}
-      {showModal && renderAddGameModal()}
     </div>
   );
-
-  // Helper per renderizzare il modal del BIOS
-  function renderAddGameModal() {
-    return (
-      <div className="add-game-modal-overlay">
-        <form className="add-game-modal" onSubmit={handleSubmit}>
-          <div className="modal-header">
-            <span>INSERIMENTO NUOVO CD</span>
-            <span style={{ color: '#7e8394' }}>SLOT {games.length + 1}</span>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="input-title">Titolo Gioco</label>
-            <input
-              id="input-title"
-              type="text"
-              required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Es. RESIDENT EVIL"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="input-dev">Sviluppatore</label>
-            <input
-              id="input-dev"
-              type="text"
-              value={developer}
-              onChange={(e) => setDeveloper(e.target.value)}
-              placeholder="Es. CAPCOM"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="input-year">Anno Uscita</label>
-            <input
-              id="input-year"
-              type="text"
-              value={releaseYear}
-              onChange={(e) => setReleaseYear(e.target.value)}
-              placeholder="Es. 1996"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="input-genre">Genere</label>
-            <input
-              id="input-genre"
-              type="text"
-              value={genre}
-              onChange={(e) => setGenre(e.target.value)}
-              placeholder="Es. SURVIVAL HORROR"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="input-cover">URL Immagine Copertina</label>
-            <input
-              id="input-cover"
-              type="text"
-              value={coverUrl}
-              onChange={(e) => setCoverUrl(e.target.value)}
-              placeholder="URL Copertina o lascia vuoto"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="select-installed">Stato Installazione</label>
-            <select
-              id="select-installed"
-              value={installed ? 'true' : 'false'}
-              onChange={(e) => setInstalled(e.target.value === 'true')}
-            >
-              <option value="true">INSTALLATO (PRONTO)</option>
-              <option value="false">NON INSTALLATO</option>
-            </select>
-          </div>
-
-          <div className="modal-actions">
-            <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
-              ANNULLA
-            </button>
-            <button type="submit" className="retro-btn btn-success">
-              REGISTRA DISCO
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
 };
 export default LibraryView;

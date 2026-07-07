@@ -31,7 +31,8 @@ export interface Game {
 }
 
 // Stato principale della console / UI
-export type ActiveView = 'library' | 'detail' | 'customize' | 'artwork';
+export type ActiveView = 'library' | 'detail' | 'customize' | 'artwork' | 'add-game';
+export type TabType = 'grids' | 'heroes' | 'logos' | 'icons';
 
 export interface ConsoleState {
   powerOn: boolean;           // Stato di accensione della console (pulsante Power)
@@ -60,4 +61,25 @@ export interface SGDBAsset {
   style: string;
   score: number;
 }
+
+export interface SearchResultGame {
+  id: number;
+  name: string;
+  releaseYear?: string;
+  thumbnailUrl: string | null;
+}
+
+export interface AddGameDraft {
+  title: string;
+  developer: string;
+  releaseYear: string;
+  genre: string;
+  exePath: string;
+  coverUrl: string;
+  heroUrl: string;
+  logoUrl: string;
+  iconUrl: string;
+  steamGridDbGameId?: number;
+}
+
 

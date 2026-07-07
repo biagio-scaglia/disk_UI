@@ -1,0 +1,573 @@
+@import '../variables';
+@import '../mixins';
+
+.add-game-wizard-container {
+  flex-grow: 1;
+  height: 100%;
+  padding: $space-xl;
+  overflow-y: auto;
+  @include tech-grid;
+  background-color: lighten($color-bg-dark, 2%);
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  @include retro-scrollbar;
+
+  // Intestazione
+  .wizard-header {
+    border-bottom: 2px solid $color-console-dark;
+    padding-bottom: $space-md;
+    box-shadow: 0 1px 0 $color-console-light;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-title {
+      font-family: $font-mono;
+      font-size: $font-size-lg;
+      color: #fff;
+    }
+
+    .slot-indicator {
+      display: block;
+      font-size: $font-size-xs;
+      color: $color-text-muted;
+      margin-top: $space-xs;
+    }
+  }
+
+  // Vista Setup Chiave API
+  .api-setup-view {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $space-xxl;
+
+    .setup-well {
+      @include plastic-panel;
+      padding: $space-xl;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $space-md;
+      border-radius: $console-border-radius;
+
+      .setup-icon {
+        color: $color-accent-orange;
+      }
+
+      h3 {
+        color: #fff;
+        font-size: $font-size-lg;
+        margin: 0;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        margin: 0;
+
+        &.hint {
+          font-size: $font-size-xs;
+          color: $color-text-muted;
+          word-break: break-all;
+          background: #111;
+          padding: $space-xs $space-sm;
+          border-radius: 2px;
+          border: 1px solid rgba(255,255,255,0.05);
+        }
+      }
+
+      .input-group {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: $space-md;
+        margin-top: $space-sm;
+
+        input {
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: $space-sm $space-md;
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          border-radius: 2px;
+          outline: none;
+          text-align: center;
+
+          &:focus {
+            border-color: $color-accent-blue;
+          }
+        }
+
+        .btn-row {
+          display: flex;
+          gap: $space-sm;
+          
+          button {
+            flex-grow: 1;
+            height: 38px;
+          }
+        }
+      }
+    }
+  }
+
+  .panel-label {
+    @include hardware-label;
+    font-size: $font-size-xs;
+    margin-bottom: $space-sm;
+    display: block;
+  }
+
+  // STEP 1: Search Layout
+  .search-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: $space-xl;
+    align-items: start;
+    flex-grow: 1;
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+      gap: $space-lg;
+    }
+
+    .search-sidebar-well {
+      @include plastic-panel;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+
+      .search-bar {
+        display: flex;
+        flex-direction: column;
+        gap: $space-sm;
+
+        input {
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: $space-sm $space-md;
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          border-radius: 2px;
+          outline: none;
+
+          &:focus {
+            border-color: $color-accent-blue;
+          }
+        }
+
+        button {
+          height: 36px;
+        }
+      }
+
+      .manual-btn {
+        height: 34px;
+        border-color: rgba(255,255,255,0.05) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.05);
+        color: $color-text-muted;
+
+        &:hover {
+          color: #fff;
+          border-color: rgba(255,255,255,0.15);
+        }
+      }
+    }
+
+    .results-panel-well {
+      @include plastic-well;
+      padding: $space-md;
+      border-radius: $console-border-radius;
+      min-height: 400px;
+      overflow-y: auto;
+      @include retro-scrollbar;
+
+      .empty-state, .loading-state, .error-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+        color: $color-text-muted;
+        font-size: $font-size-sm;
+        text-align: center;
+      }
+
+      .error-state {
+        color: $color-accent-red;
+      }
+
+      // Risultati Ricerca Griglia Cards
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: $space-md;
+
+        .result-card {
+          @include plastic-panel;
+          background-color: lighten($color-console-base, 1%);
+          border-radius: $console-border-radius;
+          padding: $space-sm;
+          display: flex;
+          flex-direction: column;
+          gap: $space-sm;
+          cursor: pointer;
+          transition: all 0.15s ease;
+
+          &:hover {
+            border-color: $color-accent-blue;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transform: translateY(-2px);
+          }
+
+          .card-artwork {
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 2px;
+            background-color: #050608;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .no-cover-placeholder {
+              color: rgba(255,255,255,0.1);
+            }
+          }
+
+          .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            .game-name {
+              font-size: $font-size-sm;
+              color: $color-text-primary;
+              font-weight: bold;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .game-year {
+              font-size: $font-size-xs;
+              color: $color-text-muted;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // STEP 2: Details & Asset Selector Layout
+  .details-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: $space-xl;
+    align-items: start;
+    flex-grow: 1;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: $space-lg;
+    }
+
+    // Colonna Preview
+    .left-preview-column {
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+
+      .preview-canvas-well {
+        @include plastic-well;
+        border-radius: $console-border-radius;
+        padding: 0;
+        overflow: hidden;
+        border-color: darken($color-console-dark, 10%);
+      }
+
+      .canvas-hero {
+        width: 100%;
+        height: 240px;
+        background-color: #121318;
+        background-position: center center;
+        background-size: cover;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        padding: $space-lg;
+        box-sizing: border-box;
+
+        .hero-gradient {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.5) 60%, transparent 100%);
+          z-index: 1;
+        }
+
+        .canvas-logo-container {
+          z-index: 2;
+          max-width: 60%;
+          height: 60px;
+          display: flex;
+          align-items: center;
+
+          .canvas-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+
+          .canvas-title {
+            font-size: $font-size-lg;
+            color: #fff;
+            text-shadow: 2px 2px 0px #000;
+          }
+        }
+
+        // 3D fluttuante jewel case
+        .canvas-jewel-case {
+          position: absolute;
+          right: $space-lg;
+          bottom: -$space-xs;
+          width: 90px;
+          height: 102px;
+          background-color: #000;
+          border-radius: 2px;
+          border: 2px solid rgba(255, 255, 255, 0.15);
+          border-right-color: rgba(0,0,0,0.4);
+          border-bottom-color: rgba(0,0,0,0.4);
+          box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+          display: flex;
+          z-index: 3;
+
+          .case-spine {
+            width: 7px;
+            height: 100%;
+            background: repeating-linear-gradient(to bottom, #333 0px, #333 1px, #1a1a1a 1px, #1a1a1a 2px);
+            border-right: 1px solid #000;
+          }
+
+          .case-cover-art {
+            flex-grow: 1;
+            height: 100%;
+            width: 0;
+            min-width: 0;
+            object-fit: cover;
+          }
+
+          .empty-cover-placeholder {
+            flex-grow: 1;
+            height: 100%;
+            background-color: #1a1a1a;
+          }
+
+          .case-glare {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 100%);
+            pointer-events: none;
+          }
+        }
+      }
+    }
+
+    // Colonna Form & Asset Selezionatore
+    .right-form-column {
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+
+      // Inputs
+      .metadata-form-panel {
+        @include plastic-panel;
+        padding: $space-md;
+        border-radius: $console-border-radius;
+        display: flex;
+        flex-direction: column;
+        gap: $space-md;
+
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: $space-md;
+
+          @media (max-width: 500px) {
+            grid-template-columns: 1fr;
+            gap: $space-sm;
+          }
+        }
+
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          gap: $space-xs;
+
+          label {
+            font-family: $font-mono;
+            font-size: $font-size-sm;
+            color: $color-text-muted;
+            text-transform: uppercase;
+          }
+
+          input {
+            background-color: #16171d;
+            border: 2px solid #23252d;
+            color: #fff;
+            padding: $space-sm $space-md;
+            font-family: $font-mono;
+            font-size: $font-size-sm;
+            border-radius: 2px;
+            outline: none;
+
+            &:focus {
+              border-color: $color-accent-blue;
+            }
+          }
+        }
+      }
+
+      // Gallerie
+      .galleries-well {
+        @include plastic-panel;
+        padding: $space-md;
+        border-radius: $console-border-radius;
+        display: flex;
+        flex-direction: column;
+        gap: $space-sm;
+
+        .tabs-row {
+          display: flex;
+          gap: $space-sm;
+          border-bottom: 2px solid $color-console-dark;
+          padding-bottom: $space-xs;
+
+          .tab-btn {
+            @include retro-button;
+            height: 32px;
+            font-size: $font-size-xs;
+            flex-grow: 1;
+
+            &.active {
+              background-color: $color-accent-blue;
+              border-top-color: lighten($color-accent-blue, 10%);
+              border-left-color: lighten($color-accent-blue, 10%);
+              border-bottom-color: darken($color-accent-blue, 20%);
+              border-right-color: darken($color-accent-blue, 20%);
+              color: #fff;
+            }
+          }
+        }
+
+        .gallery-viewport {
+          @include plastic-well;
+          padding: $space-sm;
+          border-radius: $console-border-radius;
+          height: 180px;
+          overflow-y: auto;
+          @include retro-scrollbar;
+
+          .gallery-empty-state, .loading-spinner-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: $color-text-muted;
+            font-size: $font-size-sm;
+          }
+
+          // Asset layout grids
+          .gallery-grid-covers,
+          .gallery-grid-heroes,
+          .gallery-grid-logos,
+          .gallery-grid-icons {
+            display: grid;
+            gap: $space-sm;
+          }
+
+          .gallery-grid-covers {
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+          }
+          .gallery-grid-heroes {
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+          }
+          .gallery-grid-logos {
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+          }
+          .gallery-grid-icons {
+            grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+          }
+
+          .asset-card {
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            background-color: #050608;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 3px;
+            transition: all 0.15s ease;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            &:hover {
+              border-color: rgba($color-accent-blue, 0.4);
+            }
+
+            &.selected {
+              border-color: $color-accent-blue;
+              box-shadow: 0 0 6px rgba(59, 147, 255, 0.5);
+
+              img {
+                opacity: 0.85;
+              }
+            }
+
+            .selection-badge {
+              position: absolute;
+              top: 2px;
+              right: 2px;
+              background-color: $color-accent-blue;
+              color: #fff;
+              border-radius: 50%;
+              width: 12px;
+              height: 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 1px solid #fff;
+            }
+          }
+        }
+      }
+
+      .save-action-row {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          height: 38px;
+          min-width: 180px;
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import LibraryView from './components/LibraryView';
 import GameDetail from './components/GameDetail';
 import Customizer from './components/Customizer';
 import ArtworkManager from './components/ArtworkManager';
+import AddGameWizard from './components/AddGameWizard';
 import RetroIcon from './components/RetroIcon';
 import './styles/main.scss';
 
@@ -467,7 +468,7 @@ function App() {
           <LibraryView
             games={games}
             onSelectGame={selectGame}
-            onAddGame={addGame}
+            onAddGameClick={() => setConsoleState((prev) => ({ ...prev, activeView: 'add-game' }))}
             onLoadMockData={formatAndLoadDefaults}
           />
         )}
@@ -499,6 +500,14 @@ function App() {
             game={selectedGame}
             onBack={() => setConsoleState((prev) => ({ ...prev, activeView: 'detail' }))}
             onSaveArtwork={saveArtwork}
+          />
+        )}
+
+        {consoleState.activeView === 'add-game' && (
+          <AddGameWizard
+            onBack={() => setConsoleState((prev) => ({ ...prev, activeView: 'library' }))}
+            onAddGame={addGame}
+            gamesCount={games.length}
           />
         )}
       </main>

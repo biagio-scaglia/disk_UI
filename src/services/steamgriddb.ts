@@ -1,4 +1,4 @@
-import { SGDBGameMatch, SGDBAsset } from '../types';
+import { SGDBGameMatch, SGDBAsset, SearchResultGame } from '../types';
 
 const BASE_URL = 'https://www.steamgriddb.com/api/v2';
 
@@ -123,3 +123,36 @@ export async function getAllGameAssets(gameId: number, apiKey: string): Promise<
 
   return { grids, heroes, logos, icons };
 }
+
+/**
+ * Cerca giochi su SteamGridDB e carica in parallelo una copertina di anteprima per ciascun risultato.
+ */
+export async function searchGamesWithThumbnails(query: string, apiKey: string): Promise<SearchResultGame[]> {
+  const matches = await searchGames(query, apiKey);
+  // Limita a 5 risultati per non saturare la quota API in un colpo solo
+  const topMatches = matches.slice(0, 5);
+
+  return Promise.all(
+    topMatches.map(async (match) => {
+      try {
+        const grids = await getGameAssets(match.id, 'grids', apiKey);
+        const thumbnailUrl = grids.length > 0 ? grids[0].thumb : null;
+        const releaseYear = match.release_date ? match.release_date.split('-')[0] : undefined;
+        return {
+          id: match.id,
+          name: match.name,
+          releaseYear,
+          thumbnailUrl,
+        };
+      } catch (e) {
+        return {
+          id: match.id,
+          name: match.name,
+          releaseYear: match.release_date ? match.release_date.split('-')[0] : undefined,
+          thumbnailUrl: null,
+        };
+      }
+    })
+  );
+}
+

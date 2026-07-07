@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Game, SGDBGameMatch, SGDBAsset } from '../types';
+import { Game, SGDBGameMatch, SGDBAsset, TabType } from '../types';
 import { searchGames, getAllGameAssets } from '../services/steamgriddb';
 import RetroIcon from './RetroIcon';
 
@@ -17,7 +17,6 @@ interface ArtworkManagerProps {
   ) => void;
 }
 
-type TabType = 'grids' | 'heroes' | 'logos' | 'icons';
 
 export const ArtworkManager: React.FC<ArtworkManagerProps> = ({
   game,
