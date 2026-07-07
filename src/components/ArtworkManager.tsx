@@ -26,10 +26,17 @@ export const ArtworkManager: React.FC<ArtworkManagerProps> = ({
 }) => {
   // Gestione API Key
   const [apiKey, setApiKey] = useState<string>(() => {
-    return localStorage.getItem('steamgriddb_api_key') || '';
+    return (
+      (import.meta.env.VITE_STEAMGRIDDB_API_KEY as string) ||
+      localStorage.getItem('steamgriddb_api_key') ||
+      ''
+    );
   });
   const [tempKey, setTempKey] = useState<string>('');
-  const [showKeyInput, setShowKeyInput] = useState<boolean>(!apiKey);
+  const [showKeyInput, setShowKeyInput] = useState<boolean>(() => {
+    const key = (import.meta.env.VITE_STEAMGRIDDB_API_KEY as string) || localStorage.getItem('steamgriddb_api_key');
+    return !key;
+  });
 
   // Stati di ricerca
   const [searchQuery, setSearchQuery] = useState<string>(game.title);
