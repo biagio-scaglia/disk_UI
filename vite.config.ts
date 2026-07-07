@@ -28,5 +28,12 @@ export default defineConfig(async () => ({
       // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
+    proxy: {
+      "/api-sgdb": {
+        target: "https://www.steamgriddb.com/api/v2",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-sgdb/, ""),
+      },
+    },
   },
 }));

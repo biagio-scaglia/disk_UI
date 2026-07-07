@@ -8,8 +8,8 @@ const BASE_URL = 'https://www.steamgriddb.com/api/v2';
  * delega la chiamata al backend Rust per evitare blocchi CORS.
  */
 async function fetchFromBackend(url: string, apiKey: string): Promise<any> {
-  // Controlla se siamo in esecuzione dentro Tauri
-  const isTauri = typeof window !== 'undefined' && (window as any).__TAURI_INTERNALS__;
+  // Controlla se siamo in esecuzione dentro Tauri (rilevando l'IPC)
+  const isTauri = typeof window !== 'undefined' && typeof (window as any).__TAURI_IPC__ === 'function';
 
   if (isTauri) {
     try {
@@ -26,8 +26,9 @@ async function fetchFromBackend(url: string, apiKey: string): Promise<any> {
       throw new Error(errStr || 'ERRORE DI RETE DURANTE LA RICHIESTA DAL BACKEND.');
     }
   } else {
-    // Fallback standard per browser (soggetto a CORS)
-    const response = await fetch(url, {
+    // Fallback standard per browser: reindirizza al proxy locale (/api-sgdb) per evitare blocchi CORS in dev
+    const localUrl = url.replace('https://www.steamgriddb.com/api/v2', '/api-sgdb');
+    const response = await fetch(localUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
