@@ -58,7 +58,7 @@ export async function searchGames(query: string, apiKey: string): Promise<SGDBGa
   }
 
   try {
-    const url = `${BASE_URL}/search/autocomplete/game/${encodeURIComponent(query)}`;
+    const url = `${BASE_URL}/search/autocomplete/${encodeURIComponent(query)}`;
     const resJson = await fetchFromBackend(url, apiKey);
     
     if (resJson.success && Array.isArray(resJson.data)) {
