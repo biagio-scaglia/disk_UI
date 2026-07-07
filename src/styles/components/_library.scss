@@ -1,0 +1,429 @@
+@import '../variables';
+@import '../mixins';
+
+.library-container {
+  flex-grow: 1;
+  height: 100%;
+  padding: 30px;
+  overflow-y: auto;
+  @include tech-grid;
+  background-color: lighten($color-bg-dark, 2%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  @include retro-scrollbar;
+
+  .library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(0,0,0,0.3);
+    padding-bottom: 12px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+
+    .library-title {
+      font-family: $font-mono;
+      font-size: 1.2rem;
+      color: $color-text-primary;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+  }
+
+  // Griglia di Custodie 3D/Fisiche
+  .library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px 20px;
+    padding: 10px 0;
+  }
+
+  // Struttura fisica di una Custodia CD (Jewel Case)
+  .jewel-case {
+    position: relative;
+    aspect-ratio: 0.9;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    user-select: none;
+    
+    // Bordo in plastica trasparente esteriore (Spessore custodia)
+    border: 3px solid rgba(255, 255, 255, 0.12);
+    border-right-color: rgba(0, 0, 0, 0.4);
+    border-bottom-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.5);
+
+    // Costola laterale sinistra della custodia (la striscia grigia o zigrinata)
+    .case-spine {
+      width: 14px;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        #444 0px,
+        #444 2px,
+        #222 2px,
+        #222 4px
+      );
+      border-right: 1px solid rgba(0,0,0,0.5);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 10px;
+    }
+
+    // Vano interno contenente il libretto/cover art
+    .case-artwork-wrapper {
+      flex-grow: 1;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      
+      .cover-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        image-rendering: pixelated;
+        transition: transform 0.3s ease;
+      }
+      
+      // Label stampata di stato (es. non installato)
+      .status-badge {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.85);
+        color: $color-accent-green;
+        font-family: $font-mono;
+        font-size: 0.55rem;
+        padding: 2px 5px;
+        border: 1px solid $color-accent-green;
+        border-radius: 2px;
+        letter-spacing: 0.05em;
+        
+        &.not-installed {
+          color: $color-text-muted;
+          border-color: $color-text-muted;
+        }
+      }
+    }
+
+    // Finitura di riflesso lucido sulla plastica trasparente della custodia
+    .case-glare {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 30%,
+        transparent 31%,
+        transparent 60%,
+        rgba(255, 255, 255, 0.04) 61%,
+        rgba(255, 255, 255, 0.08) 100%
+      );
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    // Varianti Fisiche / Edizioni Custom
+    &.style-black-label {
+      border-color: rgba(60, 60, 60, 0.4);
+      .case-spine {
+        background: #0d0d0d; // Dorsino nero laccato
+      }
+      .case-artwork-wrapper::before {
+        content: "BLACK LABEL";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        background: #000;
+        color: #fff;
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        text-align: center;
+        padding: 1px 0;
+        letter-spacing: 0.1em;
+        z-index: 3;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+      }
+    }
+
+    &.style-platinum {
+      border: 3px solid #b0b5be;
+      border-right-color: #555;
+      border-bottom-color: #555;
+      box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.6), inset 0 0 5px rgba(255,255,255,0.5);
+      
+      .case-spine {
+        background: linear-gradient(to right, #8a8f98, #cbd5e1);
+      }
+      .case-artwork-wrapper::before {
+        content: "PLATINUM RANGE";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        background: #8a8f98;
+        color: #fff;
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        text-align: center;
+        padding: 1.5px 0;
+        letter-spacing: 0.05em;
+        z-index: 3;
+        font-weight: bold;
+      }
+    }
+
+    &.style-holographic {
+      border-color: rgba(230, 230, 250, 0.25);
+      
+      .case-glare {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 128, 0.15) 0%,
+          rgba(0, 255, 255, 0.15) 40%,
+          rgba(255, 255, 0, 0.15) 80%,
+          rgba(255, 0, 128, 0.1) 100%
+        );
+        mix-blend-mode: color-burn;
+        opacity: 0.8;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(60deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.2) 100%);
+        pointer-events: none;
+        z-index: 6;
+      }
+    }
+
+    // Hover effect
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 6px 10px 18px rgba(0, 0, 0, 0.6);
+      border-color: rgba(255, 255, 255, 0.25);
+      
+      .case-artwork-wrapper .cover-image {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  // Card per aggiungere un nuovo gioco (Stile cassa vuota)
+  .add-game-card {
+    border: 2px dashed rgba($color-text-muted, 0.4);
+    background-color: rgba(0, 0, 0, 0.15);
+    aspect-ratio: 0.9;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: $color-text-muted;
+    transition: all 0.2s ease;
+    box-shadow: none;
+
+    span {
+      font-family: $font-mono;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-color: $color-accent-blue-light;
+      color: $color-text-primary;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  // --- STATO VUOTO (BIOS SCHERMATA MEMORIA) ---
+  .empty-library-state {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    height: 100%;
+
+    .bios-screen {
+      width: 100%;
+      max-width: 600px;
+      @include plastic-panel;
+      background-color: #0b0c0e;
+      border: 3px solid $color-console-dark;
+      padding: 24px;
+      font-family: $font-mono;
+      color: $color-text-muted;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      @include crt-scanlines;
+
+      .bios-header {
+        border-bottom: 1px solid rgba($color-text-muted, 0.2);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+      }
+
+      .bios-title {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        animation: text-glitch 2s infinite linear;
+      }
+
+      .bios-instruction {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin-bottom: 25px;
+        color: $color-text-primary;
+      }
+
+      // Visualizzatore dei blocchi Memory Card
+      .memory-blocks-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+
+        .memory-block {
+          aspect-ratio: 1;
+          border: 1px dashed rgba($color-text-muted, 0.3);
+          background-color: rgba(255, 255, 255, 0.02);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.6rem;
+          color: rgba($color-text-muted, 0.5);
+          gap: 6px;
+          border-radius: 2px;
+          
+          &.active {
+            border-style: solid;
+            border-color: $color-accent-blue;
+            background-color: rgba($color-accent-blue, 0.05);
+            color: $color-text-primary;
+          }
+        }
+      }
+
+      .bios-actions {
+        display: flex;
+        justify-content: flex-end;
+        
+        button {
+          @include retro-button;
+          background-color: #121316;
+          border-color: #2a2d35;
+          color: $color-text-primary;
+
+          &:hover {
+            border-color: $color-accent-blue-light;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  // --- FORM DI AGGIUNTA GIOCO (MOCK BIOS) ---
+  .add-game-modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.85);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(2px);
+
+    .add-game-modal {
+      width: 100%;
+      max-width: 460px;
+      @include plastic-panel;
+      background-color: #0d0e12;
+      border: 3px solid $color-console-dark;
+      padding: 24px;
+      font-family: $font-mono;
+      @include crt-scanlines;
+
+      .modal-header {
+        font-size: 0.9rem;
+        color: #fff;
+        border-bottom: 2px solid $color-console-dark;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-size: 0.75rem;
+          color: $color-text-muted;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        input, select {
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: 8px 10px;
+          font-family: $font-mono;
+          font-size: 0.85rem;
+          border-radius: 2px;
+          outline: none;
+
+          &:focus {
+            border-color: $color-accent-blue;
+            box-shadow: 0 0 5px rgba(0, 102, 214, 0.4);
+          }
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+
+        .btn-cancel {
+          @include retro-button;
+          background-color: transparent;
+          border-color: transparent;
+          color: $color-text-muted;
+        }
+      }
+    }
+  }
+}

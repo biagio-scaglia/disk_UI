@@ -1,0 +1,269 @@
+@import '../variables';
+@import '../mixins';
+
+.customizer-container {
+  flex-grow: 1;
+  height: 100%;
+  padding: 30px;
+  overflow-y: auto;
+  @include tech-grid;
+  background-color: lighten($color-bg-dark, 2%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  @include retro-scrollbar;
+
+  // Intestazione
+  .customizer-header {
+    border-bottom: 2px solid $color-console-dark;
+    padding-bottom: 12px;
+    box-shadow: 0 1px 0 $color-console-light;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-title {
+      font-family: $font-mono;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+  }
+
+  // Layout Principale (Anteprima | Opzioni)
+  .customizer-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Colonna Sinistra: Sezione di Anteprima dal vivo
+  .preview-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    @include plastic-well;
+    padding: 24px;
+    border-radius: 6px;
+
+    .preview-label {
+      @include hardware-label;
+      font-size: 0.65rem;
+      margin-bottom: 10px;
+    }
+
+    .preview-display {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      height: 240px;
+      position: relative;
+
+      @media (max-width: 500px) {
+        flex-direction: column;
+        height: auto;
+      }
+    }
+
+    // Jewel Case Preview
+    .preview-case {
+      width: 150px;
+      height: 168px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-right-color: rgba(0,0,0,0.4);
+      border-bottom-color: rgba(0,0,0,0.4);
+      border-radius: 4px;
+      box-shadow: 4px 6px 12px rgba(0,0,0,0.5);
+      display: flex;
+      position: relative;
+      background-color: #000;
+      flex-shrink: 0;
+
+      .case-spine {
+        width: 12px;
+        height: 100%;
+        background: repeating-linear-gradient(to bottom, #333 0px, #333 2px, #1a1a1a 2px, #1a1a1a 4px);
+        border-right: 1px solid #000;
+      }
+
+      .cover-img {
+        flex-grow: 1;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .case-glare {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 40%, transparent 100%);
+      }
+
+      &.style-black-label {
+        .case-spine { background: #000; }
+        &::before {
+          content: "BLACK LABEL";
+          position: absolute;
+          top: 0; left: 12px; right: 0;
+          background: #000; color: #fff; font-family: $font-mono; font-size: 0.45rem;
+          text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); z-index: 2;
+        }
+      }
+      &.style-platinum {
+        border-color: #b0b5be;
+        .case-spine { background: #8a8f98; }
+        &::before {
+          content: "PLATINUM";
+          position: absolute;
+          top: 0; left: 12px; right: 0;
+          background: #8a8f98; color: #fff; font-family: $font-mono; font-size: 0.45rem;
+          text-align: center; font-weight: bold; z-index: 2;
+        }
+      }
+      &.style-holographic {
+        .case-glare {
+          background: linear-gradient(135deg, rgba(255,0,128,0.1) 0%, rgba(0,255,255,0.1) 50%, rgba(255,255,0,0.1) 100%);
+          mix-blend-mode: color-burn;
+        }
+      }
+    }
+
+    // CD Media Preview
+    .preview-disc {
+      width: 156px;
+      height: 156px;
+      border-radius: 50%;
+      box-shadow: 4px 6px 12px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+
+      .disc-center-ring {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 3px solid rgba(255,255,255,0.15);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        
+        span {
+          font-family: $font-mono;
+          font-size: 0.35rem;
+          transform: rotate(-45deg);
+          text-align: center;
+          max-width: 40px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  // Colonna Destra: Opzioni di Personalizzazione
+  .options-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .options-group {
+      @include plastic-panel;
+      background-color: lighten($color-console-base, 1%);
+      padding: 16px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .group-title {
+        @include hardware-label;
+        font-size: 0.7rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+        padding-bottom: 6px;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+      }
+
+      .option-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-family: $font-mono;
+          font-size: 0.75rem;
+          color: $color-text-muted;
+          text-transform: uppercase;
+        }
+
+        select, input[type="text"] {
+          background-color: #16171d;
+          border: 2px solid #23252d;
+          color: #fff;
+          padding: 8px 10px;
+          font-family: $font-mono;
+          font-size: 0.85rem;
+          border-radius: 2px;
+          outline: none;
+
+          &:focus {
+            border-color: $color-accent-blue;
+          }
+        }
+
+        // Palette dei Colori fisici preimpostati (Hardware Swatches)
+        .color-swatches {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 4px;
+
+          .swatch-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            transition: transform 0.1s ease;
+            
+            &.active {
+              transform: scale(1.15);
+              border-color: $color-accent-blue-light;
+              box-shadow: 0 0 6px rgba(59, 147, 255, 0.8);
+            }
+            
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+    }
+
+    // Bottoni Salva / Cancella
+    .customizer-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 10px;
+
+      button {
+        @include retro-button;
+        height: 42px;
+        min-width: 120px;
+      }
+    }
+  }
+}

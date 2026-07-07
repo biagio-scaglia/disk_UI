@@ -1,0 +1,45 @@
+// Font Imports da Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+// Palette Colori: Ispirata all'hardware PS1 e console da salotto
+$color-bg-dark: #121316;         // Sfondo desktop / contorno (nero fumo opaco)
+$color-console-base: #282930;    // Grigio scuro per la scocca della console (plastica opaca)
+$color-console-light: #363842;   // Colore di evidenziazione (luce dall'alto)
+$color-console-dark: #16171b;    // Colore d'ombra (plastica in ombra)
+
+// Accenti Console & BIOS
+$color-accent-blue: #0066d6;     // Blu per le Memory Card e il BIOS
+$color-accent-blue-light: #3b93ff;
+$color-accent-blue-glow: rgba(0, 102, 214, 0.4);
+
+$color-accent-green: #10b981;    // LED acceso (Power ON) / Stato installato
+$color-accent-green-glow: rgba(16, 185, 129, 0.4);
+
+$color-accent-orange: #f59e0b;   // LED standby/attesa / Avviso vuoto
+$color-accent-orange-glow: rgba(245, 158, 11, 0.3);
+
+$color-accent-red: #ef4444;      // Stato errore / Console OFF / Led Power spento
+$color-accent-red-glow: rgba(239, 68, 68, 0.4);
+
+// Testi
+$color-text-primary: #e2e4e9;    // Grigio ghiaccio ad alta leggibilità
+$color-text-muted: #7e8394;      // Grigio per etichette tecniche stampate
+$color-text-dark: #0f1013;       // Grigio scuro per parti incavate / testi neri
+
+// Tipografia
+$font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$font-mono: 'Share Tech Mono', "Courier New", Courier, monospace;
+
+// Dimensioni e Spaziature
+$sidebar-width: 280px;
+$console-border-radius: 8px;
+
+// Ombre e Bevel Fisici
+$bevel-outset: 2px solid;
+$bevel-inset: 2px solid;
+
+// Box Shadow per profondità hardware
+$shadow-hardware-groove: inset 2px 2px 4px rgba(0, 0, 0, 0.8), inset -2px -2px 4px rgba(255, 255, 255, 0.1);
+$shadow-hardware-panel: 3px 3px 0px rgba(0, 0, 0, 0.5);
+$shadow-button-active: inset 2px 2px 0px rgba(0, 0, 0, 0.6);
+$shadow-led-glow: 0 0 8px currentColor;

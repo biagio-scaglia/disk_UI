@@ -1,0 +1,355 @@
+@import '../variables';
+@import '../mixins';
+
+.detail-container {
+  flex-grow: 1;
+  height: 100%;
+  padding: 30px;
+  overflow-y: auto;
+  @include tech-grid;
+  background-color: lighten($color-bg-dark, 2%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  @include retro-scrollbar;
+
+  // Pulsante Indietro
+  .back-btn-container {
+    display: flex;
+    justify-content: flex-start;
+    
+    button {
+      @include retro-button;
+      border-color: rgba(255,255,255,0.05) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.05);
+      color: $color-text-muted;
+      
+      &:hover {
+        color: #fff;
+        border-color: rgba(255,255,255,0.15);
+      }
+    }
+  }
+
+  // Layout a due colonne (Visual / Info)
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 30px;
+    align-items: start;
+    margin-top: 10px;
+
+    @media (max-width: 800px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Colonna Sinistra: Visualizzatore Oggetto Fisico (Copertina + CD che sguscia fuori)
+  .detail-visuals {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+    height: 300px;
+    perspective: 800px; // Aggiunge profondità 3D
+
+    .visual-wrapper {
+      position: relative;
+      width: 220px;
+      height: 245px;
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease;
+
+      &:hover {
+        transform: rotateY(-8deg);
+
+        // Il CD sguscia fuori sul lato destro all'hover!
+        .peek-disc {
+          transform: translate(65px, -50%) rotate(45deg);
+        }
+      }
+    }
+
+    // Custodia Jewel Case in Dettaglio (angolata e 3D)
+    .detail-case {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      background-color: #000;
+      border-radius: 4px;
+      border: 4px solid rgba(255, 255, 255, 0.15);
+      border-right-color: rgba(0,0,0,0.4);
+      border-bottom-color: rgba(0,0,0,0.4);
+      box-shadow: 8px 12px 20px rgba(0,0,0,0.6);
+      display: flex;
+      
+      .case-spine {
+        width: 16px;
+        height: 100%;
+        background: repeating-linear-gradient(
+          to bottom,
+          #333 0px,
+          #333 2px,
+          #1a1a1a 2px,
+          #1a1a1a 4px
+        );
+        border-right: 1px solid #000;
+        flex-shrink: 0;
+      }
+
+      .case-cover-art {
+        flex-grow: 1;
+        height: 100%;
+        object-fit: cover;
+        image-rendering: pixelated;
+      }
+
+      .case-glare {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12) 0%,
+          rgba(255, 255, 255, 0.04) 30%,
+          transparent 31%,
+          transparent 100%
+        );
+        pointer-events: none;
+      }
+      
+      // Classi copertina
+      &.style-black-label {
+        .case-spine { background: #000; }
+        &::before {
+          content: "BLACK LABEL";
+          position: absolute;
+          top: 0; left: 16px; right: 0;
+          background: #000; color: #fff;
+          font-family: $font-mono; font-size: 0.55rem; text-align: center;
+          padding: 2px 0; z-index: 6; border-bottom: 1px solid rgba(255,255,255,0.25);
+        }
+      }
+      &.style-platinum {
+        border-color: #b0b5be;
+        .case-spine { background: #8a8f98; }
+        &::before {
+          content: "PLATINUM RANGE";
+          position: absolute;
+          top: 0; left: 16px; right: 0;
+          background: #8a8f98; color: #fff;
+          font-family: $font-mono; font-size: 0.55rem; text-align: center;
+          padding: 2px 0; z-index: 6; font-weight: bold;
+        }
+      }
+      &.style-holographic {
+        .case-glare {
+          background: linear-gradient(
+            135deg,
+            rgba(255, 0, 128, 0.12) 0%,
+            rgba(0, 255, 255, 0.12) 40%,
+            rgba(255, 255, 0, 0.12) 80%,
+            rgba(255, 0, 128, 0.08) 100%
+          );
+          mix-blend-mode: color-burn;
+        }
+      }
+    }
+
+    // CD Fisico che spunta da dietro la custodia
+    .peek-disc {
+      position: absolute;
+      top: 50%;
+      left: 60px;
+      transform: translate(0px, -50%) rotate(0deg);
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      z-index: 3;
+      box-shadow: 4px 6px 12px rgba(0,0,0,0.5);
+      transition: all 0.40s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .disc-center-ring {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 3px solid rgba(255,255,255,0.15);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        span {
+          font-family: $font-mono;
+          font-size: 0.45rem;
+          transform: rotate(-45deg);
+          color: rgba(255,255,255,0.7);
+          text-align: center;
+          max-width: 50px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  // Colonna Destra: Informazioni e Azioni di Avvio
+  .detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .game-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid $color-console-dark;
+      padding-bottom: 10px;
+      box-shadow: 0 1px 0 $color-console-light;
+      text-shadow: 2px 2px 0px #000;
+    }
+
+    // Box delle specifiche tecniche (Well)
+    .specs-well {
+      @include plastic-well;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      border-radius: 4px;
+
+      .spec-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        .spec-label {
+          @include hardware-label;
+          font-size: 0.65rem;
+        }
+
+        .spec-value {
+          font-family: $font-mono;
+          font-size: 0.85rem;
+          color: $color-text-primary;
+        }
+      }
+    }
+
+    // Sezione Azione Principale (Boot / Caricamento / Installazione)
+    .main-actions-section {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      // Il grosso pulsante di boot console
+      .btn-boot-console {
+        @include retro-button;
+        height: 60px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        border-radius: 6px;
+        
+        &.ready-to-boot {
+          background-color: darken($color-accent-green, 10%);
+          border-top-color: lighten($color-accent-green, 8%);
+          border-left-color: lighten($color-accent-green, 8%);
+          border-bottom-color: darken($color-accent-green, 25%);
+          border-right-color: darken($color-accent-green, 25%);
+          color: #fff;
+          text-shadow: 1px 1px 0 #000;
+          box-shadow: 0 4px 0 darken($color-accent-green, 25%), 0 6px 10px rgba(0,0,0,0.5);
+
+          &:hover {
+            background-color: $color-accent-green;
+          }
+
+          &:active {
+            border-top-color: darken($color-accent-green, 25%);
+            border-left-color: darken($color-accent-green, 25%);
+            border-bottom-color: lighten($color-accent-green, 8%);
+            border-right-color: lighten($color-accent-green, 8%);
+            transform: translateY(4px);
+            box-shadow: none;
+          }
+        }
+
+        &.spinning-state {
+          background-color: #0b0c0e;
+          border-color: $color-console-dark;
+          color: $color-accent-green;
+          text-shadow: 0 0 6px $color-accent-green-glow;
+          cursor: wait;
+          box-shadow: none;
+          
+          .spinner-icon {
+            animation: disc-spin 1s infinite linear;
+          }
+        }
+      }
+
+      // Pannello di stato/avviso per dischi non inseriti o non installati
+      .status-alert-box {
+        @include plastic-well;
+        background-color: rgba($color-accent-orange, 0.05);
+        border: 2px solid rgba($color-accent-orange, 0.2);
+        border-radius: 4px;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .alert-icon {
+          color: $color-accent-orange;
+        }
+
+        .alert-text {
+          font-family: $font-mono;
+          font-size: 0.75rem;
+          color: $color-text-primary;
+          line-height: 1.3;
+          
+          span {
+            display: block;
+            font-size: 0.65rem;
+            color: $color-text-muted;
+            margin-top: 2px;
+          }
+        }
+      }
+    }
+
+    // Pulsanti di configurazione e distruttivi
+    .management-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+
+      button {
+        flex-grow: 1;
+        @include retro-button;
+        height: 38px;
+        font-size: 0.75rem;
+
+        &.btn-delete {
+          border-color: rgba(255,255,255,0.05) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.05);
+          color: $color-accent-red;
+
+          &:hover {
+            background-color: darken($color-accent-red, 20%);
+            color: #fff;
+            border-color: rgba($color-accent-red, 0.3);
+          }
+        }
+      }
+    }
+  }
+}

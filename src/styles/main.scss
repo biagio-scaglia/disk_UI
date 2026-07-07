@@ -1,0 +1,191 @@
+@import 'variables';
+@import 'mixins';
+
+// Reset di Base
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-sans;
+  background-color: $color-bg-dark;
+  color: $color-text-primary;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+// Stile Scrollbar Globale
+@include retro-scrollbar;
+
+// Animazioni Retro-Hardware
+@keyframes disc-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes led-pulse {
+  0%, 100% {
+    opacity: 0.9;
+    box-shadow: 0 0 6px currentColor;
+  }
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 2px currentColor;
+  }
+}
+
+@keyframes led-blink-fast {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px currentColor;
+  }
+  50% {
+    opacity: 0.1;
+    box-shadow: 0 0 1px currentColor;
+  }
+}
+
+@keyframes insert-disc {
+  0% {
+    transform: translate(-50%, -150%) rotate(0deg) scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -30%) rotate(180deg) scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes eject-disc {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -180%) rotate(-120deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes bios-boot {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  10% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes text-glitch {
+  0% {
+    text-shadow: 1px 0 0 rgba(255, 0, 0, 0.4), -1px 0 0 rgba(0, 0, 255, 0.4);
+  }
+  50% {
+    text-shadow: -1px 0 0 rgba(255, 0, 0, 0.4), 1px 0 0 rgba(0, 0, 255, 0.4);
+  }
+  100% {
+    text-shadow: 1px 0 0 rgba(255, 0, 0, 0.4), -1px 0 0 rgba(0, 0, 255, 0.4);
+  }
+}
+
+// Classi di Utilità globali
+.text-mono {
+  font-family: $font-mono;
+}
+
+.glow-blue {
+  color: $color-accent-blue-light;
+  text-shadow: 0 0 6px rgba(59, 147, 255, 0.6);
+}
+
+.glow-green {
+  color: $color-accent-green;
+  text-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+// Utility per pulsanti sporgenti/incavati
+.retro-btn {
+  @include retro-button;
+}
+
+.btn-primary {
+  background-color: darken($color-accent-blue, 10%);
+  border-top-color: lighten($color-accent-blue, 5%);
+  border-left-color: lighten($color-accent-blue, 5%);
+  border-bottom-color: darken($color-accent-blue, 25%);
+  border-right-color: darken($color-accent-blue, 25%);
+  
+  &:hover {
+    background-color: $color-accent-blue;
+  }
+  
+  &:active {
+    border-top-color: darken($color-accent-blue, 25%);
+    border-left-color: darken($color-accent-blue, 25%);
+    border-bottom-color: lighten($color-accent-blue, 5%);
+    border-right-color: lighten($color-accent-blue, 5%);
+  }
+}
+
+.btn-success {
+  background-color: darken($color-accent-green, 15%);
+  border-top-color: lighten($color-accent-green, 5%);
+  border-left-color: lighten($color-accent-green, 5%);
+  border-bottom-color: darken($color-accent-green, 30%);
+  border-right-color: darken($color-accent-green, 30%);
+  
+  &:hover {
+    background-color: darken($color-accent-green, 5%);
+  }
+  
+  &:active {
+    border-top-color: darken($color-accent-green, 30%);
+    border-left-color: darken($color-accent-green, 30%);
+    border-bottom-color: lighten($color-accent-green, 5%);
+    border-right-color: lighten($color-accent-green, 5%);
+  }
+}
+
+// Stile per contenitori ad aspetto hardware
+.well-panel {
+  @include plastic-well;
+}
+
+.raised-panel {
+  @include plastic-panel;
+}
+
+// Fogli di stile dei componenti retro-console
+@import 'components/sidebar';
+@import 'components/disctray';
+@import 'components/library';
+@import 'components/gamedetail';
+@import 'components/customizer';
+

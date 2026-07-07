@@ -1,0 +1,128 @@
+@import 'variables';
+
+// Effetto pannello di plastica sporgente (Tactile Bevel Outset)
+@mixin plastic-panel {
+  background-color: $color-console-base;
+  border-top: 2px solid $color-console-light;
+  border-left: 2px solid $color-console-light;
+  border-bottom: 2px solid $color-console-dark;
+  border-right: 2px solid $color-console-dark;
+  box-shadow: $shadow-hardware-panel;
+}
+
+// Effetto vano/incavo scavato nella scocca (Tactile Groove/Well Inset)
+@mixin plastic-well {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-top: 2px solid $color-console-dark;
+  border-left: 2px solid $color-console-dark;
+  border-bottom: 2px solid $color-console-light;
+  border-right: 2px solid $color-console-light;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+// Effetto bottone hardware di plastica
+@mixin retro-button {
+  background-color: $color-console-base;
+  font-family: $font-mono;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: $color-text-primary;
+  border-top: 2px solid $color-console-light;
+  border-left: 2px solid $color-console-light;
+  border-bottom: 2px solid $color-console-dark;
+  border-right: 2px solid $color-console-dark;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.1s ease;
+  user-select: none;
+
+  &:hover {
+    background-color: lighten($color-console-base, 3%);
+    color: #fff;
+  }
+
+  &:active {
+    background-color: darken($color-console-base, 5%);
+    border-top: 2px solid $color-console-dark;
+    border-left: 2px solid $color-console-dark;
+    border-bottom: 2px solid $color-console-light;
+    border-right: 2px solid $color-console-light;
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: darken($color-console-base, 10%);
+    border-color: darken($color-console-base, 8%);
+    color: $color-text-muted;
+  }
+}
+
+// Stile per etichette hardware (stampate su plastica)
+@mixin hardware-label {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+
+// Griglia tecnica di sfondo (Memory Card / Menu BIOS)
+@mixin tech-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+}
+
+// Effetto Scanlines CRT molto sottile per schermi e visualizer
+@mixin crt-scanlines {
+  position: relative;
+  &::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.4;
+  }
+}
+
+// Scrollbar hardware
+@mixin retro-scrollbar {
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-left: 2px solid $color-console-dark;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $color-console-base;
+    border-top: 2px solid $color-console-light;
+    border-left: 2px solid $color-console-light;
+    border-bottom: 2px solid $color-console-dark;
+    border-right: 2px solid $color-console-dark;
+    
+    &:hover {
+      background-color: lighten($color-console-base, 4%);
+    }
+    &:active {
+      border-top: 2px solid $color-console-dark;
+      border-left: 2px solid $color-console-dark;
+      border-bottom: 2px solid $color-console-light;
+      border-right: 2px solid $color-console-light;
+    }
+  }
+}
